@@ -1,0 +1,3277 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>大庄國小 71 週年校慶運動會大作戰 ～最終決戰：日晷混沌・操場巨神～</title>
+  <style>
+    /* =====================================================================
+     * 100% Self-Contained Retro 16-bit JRPG Stylesheet (Zero External Assets)
+     * ===================================================================== */
+    :root {
+      --ff-top: #183286;
+      --ff-mid: #10205c;
+      --ff-bot: #081034;
+      --gold-hi: #fff7bd;
+      --gold-mid: #ffd43b;
+      --gold-lo: #e67e00;
+      --danger: #ff334b;
+      --cyan: #3ee6ff;
+      --green: #2ee67a;
+      --violet-1: #8b5cf6;
+      --violet-2: #6d28d9;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: radial-gradient(circle at center, #1d1538 0%, #050610 100%);
+      font-family: "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", system-ui, -apple-system, sans-serif;
+      color: #ffffff;
+    }
+
+    .font-mono-px {
+      font-family: "Courier New", Consolas, Menlo, monospace;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+    }
+
+    /* 9:16 Vertical Mobile Shell centered with retro bezel on desktop */
+    #app-shell {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      max-width: calc(100vh * 9 / 16);
+      max-width: calc(100dvh * 9 / 16);
+      margin: 0 auto;
+      background: #070914;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border-left: 2px solid rgba(255, 212, 59, 0.35);
+      border-right: 2px solid rgba(255, 212, 59, 0.35);
+      box-shadow: 0 0 56px rgba(0, 0, 0, 0.95);
+    }
+
+    @media (max-aspect-ratio: 9/16) {
+      #app-shell {
+        max-width: 100vw;
+        border: none;
+        box-shadow: none;
+      }
+    }
+
+    canvas {
+      display: block;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+
+    .hidden { display: none !important; }
+    .scene {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Subtle CRT Scanline & Flash Overlay */
+    .scanlines {
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+      z-index: 40;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.05) 0px,
+        rgba(0, 0, 0, 0.05) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+    }
+
+    #flash-layer {
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+      z-index: 60;
+      background: #ffffff;
+      opacity: 0;
+      transition: opacity 0.14s ease-out;
+    }
+
+    /* Classic SNES / FF Blue-Gradient Double-Bordered Window */
+    .ff-box {
+      background: linear-gradient(180deg, #162b78 0%, #10205c 52%, #081034 100%);
+      border: 2.5px solid #ffffff;
+      box-shadow:
+        inset 0 0 0 1.5px #6ea0ff,
+        inset 0 2px 8px rgba(147, 197, 253, 0.25),
+        0 4px 12px rgba(0, 0, 0, 0.78);
+      border-radius: 7px;
+    }
+
+    .ff-narration {
+      background: linear-gradient(90deg, #0d1d54 0%, #1a378f 50%, #0d1d54 100%);
+      border: 2px solid #ffffff;
+      box-shadow: inset 0 0 0 1px #6ea0ff, 0 3px 10px rgba(0, 0, 0, 0.7);
+      border-radius: 6px;
+    }
+
+    .ff-banner {
+      background: linear-gradient(90deg, rgba(10, 14, 34, 0.92) 0%, rgba(20, 36, 102, 0.97) 25%, rgba(20, 36, 102, 0.97) 75%, rgba(10, 14, 34, 0.92) 100%);
+      border-top: 2px solid #ffd43b;
+      border-bottom: 2px solid #ffd43b;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.8);
+    }
+
+    .ff-warning {
+      background: linear-gradient(90deg, rgba(80, 6, 16, 0.96) 0%, rgba(185, 16, 36, 0.99) 50%, rgba(80, 6, 16, 0.96) 100%);
+      border-top: 2px solid #ff8a96;
+      border-bottom: 2px solid #ff8a96;
+      box-shadow: 0 4px 18px rgba(255, 40, 60, 0.65);
+    }
+
+    /* Top Status Bar */
+    .top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 36px;
+      z-index: 35;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 8px;
+      background: rgba(6, 10, 26, 0.88);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    .top-brand {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 900;
+      color: #fde68a;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .dot-live {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #fbbf24;
+      flex-shrink: 0;
+      animation: pulseDot 1.2s infinite alternate;
+    }
+    @keyframes pulseDot {
+      from { opacity: 0.45; transform: scale(0.9); }
+      to   { opacity: 1; transform: scale(1.15); }
+    }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+    .top-btn {
+      border: 1.5px solid rgba(255, 255, 255, 0.65);
+      border-radius: 5px;
+      padding: 3px 8px;
+      font-size: 10.5px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform 0.08s;
+    }
+    .top-btn:active { transform: scale(0.94); }
+    .top-btn-auto { background: #fbbf24; color: #0f172a; }
+    .top-btn-manual { background: #3b82f6; color: #ffffff; }
+    .top-btn-icon { background: #1e293b; color: #ffffff; padding: 3px 7px; }
+
+    /* Golden 3D Title Text */
+    .title-gold {
+      background: linear-gradient(180deg, #fffbe0 0%, #ffe066 45%, #ff922b 82%, #dc2626 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 3px 0 #3b0a0a) drop-shadow(0 0 12px rgba(255, 170, 40, 0.7));
+    }
+
+    /* JRPG Menu Rows & White Glove Cursor */
+    .cmd-row {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 8px;
+      border-radius: 5px;
+      font-weight: 800;
+      cursor: pointer;
+      color: #f1f5f9;
+      transition: background 0.1s, transform 0.08s;
+    }
+    .cmd-row:hover, .cmd-row.selected {
+      background: linear-gradient(90deg, rgba(96, 165, 250, 0.45) 0%, rgba(59, 130, 246, 0.12) 100%);
+      color: #fff6b8;
+    }
+    .cmd-row:active { transform: scale(0.98); }
+
+    .cmd-row.summon-glow {
+      background: linear-gradient(90deg, rgba(249, 115, 22, 0.68) 0%, rgba(250, 204, 21, 0.3) 100%);
+      color: #fffbe0;
+      border: 1.5px solid #ffd43b;
+      animation: summonPulse 0.75s infinite alternate;
+    }
+    @keyframes summonPulse {
+      from { box-shadow: 0 0 6px rgba(255, 212, 59, 0.5); }
+      to   { box-shadow: 0 0 18px rgba(255, 130, 35, 1); }
+    }
+
+    /* Red Strikethrough for Trap Choices */
+    .cmd-row.trapped {
+      color: #fda4af !important;
+      opacity: 0.75;
+    }
+    .cmd-row.trapped::after {
+      content: "";
+      position: absolute;
+      left: 18px;
+      right: 6px;
+      top: 50%;
+      height: 3px;
+      background: #ff1e38;
+      box-shadow: 0 0 8px #ff1e38;
+      transform: translateY(-50%) rotate(-1.5deg);
+      animation: strikeAnim 0.22s ease-out forwards;
+    }
+    @keyframes strikeAnim {
+      from { transform: scaleX(0) translateY(-50%); transform-origin: left; }
+      to   { transform: scaleX(1) translateY(-50%) rotate(-1.5deg); transform-origin: left; }
+    }
+
+    .glove {
+      display: inline-block;
+      width: 16px;
+      text-align: center;
+      font-size: 12px;
+      flex-shrink: 0;
+      animation: gloveBob 0.45s infinite alternate ease-in-out;
+    }
+    .glove.invisible { opacity: 0; }
+    @keyframes gloveBob {
+      from { transform: translateX(-2px); }
+      to   { transform: translateX(2px); }
+    }
+
+    /* Screen Shake Animation */
+    .shake-now {
+      animation: screenShake 0.32s linear;
+    }
+    @keyframes screenShake {
+      0%, 100% { transform: translate(0, 0); }
+      20% { transform: translate(-5px, 3px); }
+      40% { transform: translate(5px, -3px); }
+      60% { transform: translate(-4px, -2px); }
+      80% { transform: translate(4px, 2px); }
+    }
+
+    /* ---------------- SCENE 1: TITLE ---------------- */
+    #scene-title {
+      padding: 46px 14px 16px;
+      justify-content: space-between;
+    }
+    .bg-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+    .title-head {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+    }
+    .date-pill {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 999px;
+      background: rgba(8, 12, 32, 0.86);
+      border: 1.5px solid rgba(255, 212, 59, 0.85);
+      color: #fde047;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.8px;
+      margin-bottom: 6px;
+    }
+    .title-main {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.25;
+      font-weight: 900;
+    }
+    .title-sub {
+      margin: 4px 0 0;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: #fef3c7;
+      text-shadow: 0 2px 4px #000;
+    }
+    .title-menu-wrap {
+      position: relative;
+      z-index: 10;
+      width: 90%;
+      margin: 0 auto 6px;
+      padding: 8px;
+    }
+    .title-foot {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      font-size: 10.5px;
+      font-weight: 800;
+      color: #fde68a;
+      text-shadow: 0 1px 3px #000;
+      margin: 0;
+    }
+
+    /* Character Showcase Modal */
+    #modal-cast {
+      position: absolute;
+      inset: 0;
+      z-index: 55;
+      background: rgba(5, 8, 22, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+    }
+    .modal-inner {
+      width: 100%;
+      max-height: 88%;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+    }
+    .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1.5px solid rgba(110, 160, 255, 0.45);
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+    }
+    .cast-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      overflow-y: auto;
+    }
+    .cast-card {
+      background: rgba(6, 12, 34, 0.8);
+      border: 1.5px solid rgba(110, 160, 255, 0.55);
+      border-radius: 7px;
+      padding: 8px 6px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .cast-canvases {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 5px;
+    }
+
+    /* ---------------- SCENE 2: EXPLORE ---------------- */
+    #scene-explore {
+      padding-top: 36px;
+      background: #070a18;
+    }
+    .explore-top {
+      padding: 6px 8px 4px;
+      z-index: 20;
+    }
+    .gear-bar {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 0 8px 5px;
+      font-size: 10px;
+      font-weight: 900;
+      z-index: 20;
+      flex-wrap: wrap;
+    }
+    .gear-pill {
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: #1e293b;
+      border: 1px solid #475569;
+      color: #94a3b8;
+    }
+    .gear-pill.got {
+      background: #047857;
+      border-color: #ffd43b;
+      color: #ffffff;
+    }
+    .explore-stage {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      overflow: hidden;
+    }
+    #canvas-explore {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #070a18;
+    }
+    #explore-controls {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      z-index: 20;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+    .dpad-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 36px);
+      grid-template-rows: repeat(3, 36px);
+      gap: 4px;
+      pointer-events: auto;
+    }
+    .dpad-btn {
+      background: rgba(15, 25, 62, 0.76);
+      border: 2px solid rgba(255, 255, 255, 0.65);
+      border-radius: 9px;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: none;
+      cursor: pointer;
+    }
+    .dpad-btn:active {
+      background: rgba(59, 130, 246, 0.9);
+      border-color: #ffd43b;
+    }
+    .btn-investigate {
+      pointer-events: auto;
+      padding: 12px 15px;
+      border-radius: 10px;
+      background: #fbbf24;
+      color: #0f172a;
+      border: 2px solid #ffffff;
+      font-size: 12.5px;
+      font-weight: 900;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.65);
+      cursor: pointer;
+    }
+    .btn-investigate:active { transform: scale(0.95); }
+    .explore-dialog-wrap {
+      padding: 7px 8px 8px;
+      background: #060916;
+      z-index: 20;
+    }
+    .dialog-box {
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 86px;
+    }
+    .portrait-frame {
+      width: 62px;
+      height: 62px;
+      flex-shrink: 0;
+      border-radius: 6px;
+      border: 2px solid #93c5fd;
+      background: #0f172a;
+      overflow: hidden;
+    }
+    .dialog-text-wrap {
+      flex: 1;
+      min-width: 0;
+    }
+    .speaker-name {
+      font-size: 11.5px;
+      font-weight: 900;
+      color: #fcd34d;
+      margin-bottom: 3px;
+    }
+    .dialog-body {
+      margin: 0;
+      font-size: 12px;
+      line-height: 1.45;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    /* ---------------- SCENE 3: BATTLE ---------------- */
+    #scene-battle {
+      padding-top: 36px;
+      background: #060916;
+    }
+    .boss-hud {
+      padding: 6px 10px;
+      background: rgba(7, 11, 28, 0.96);
+      border-bottom: 1.5px solid rgba(129, 140, 248, 0.4);
+      z-index: 20;
+    }
+    .boss-hud-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+    .badge {
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 9.5px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .badge-boss { background: #dc2626; color: #fff; }
+    .badge-round { background: #312e81; border: 1px solid #38bdf8; color: #bae6fd; }
+    .badge-clean { background: #065f46; border: 1px solid #34d399; color: #d1fae5; }
+    .hp-track {
+      position: relative;
+      width: 100%;
+      height: 13px;
+      background: #0f172a;
+      border-radius: 999px;
+      border: 1.5px solid rgba(255, 255, 255, 0.7);
+      overflow: hidden;
+    }
+    #boss-hp-fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #b91c1c 0%, #f97316 55%, #fde047 100%);
+      transition: width 0.45s ease-out;
+    }
+    #boss-hp-label {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      color: #fff;
+      text-shadow: 0 1px 2px #000;
+    }
+    .battle-stage {
+      position: relative;
+      flex: 1;
+      min-height: 195px;
+      width: 100%;
+      overflow: hidden;
+    }
+    #canvas-battle {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #060916;
+    }
+    #battle-banner {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      right: 8px;
+      padding: 6px 10px;
+      text-align: center;
+      z-index: 25;
+      border-radius: 4px;
+    }
+    #battle-banner-sub {
+      font-size: 10px;
+      font-weight: 800;
+      color: #fde047;
+    }
+    #battle-banner-main {
+      font-size: 12.5px;
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1.35;
+      margin-top: 1px;
+    }
+    #battle-time-tag {
+      position: absolute;
+      left: 8px;
+      bottom: 6px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: rgba(7, 10, 26, 0.85);
+      border: 1px solid rgba(255, 212, 59, 0.55);
+      font-size: 10px;
+      font-weight: 800;
+      color: #fde68a;
+      z-index: 15;
+    }
+    .battle-ui {
+      padding: 7px 8px 8px;
+      background: #060916;
+      border-top: 1.5px solid rgba(129, 140, 248, 0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      z-index: 20;
+    }
+    .cmd-grid {
+      display: grid;
+      grid-template-columns: 7fr 5fr;
+      gap: 6px;
+      min-height: 126px;
+    }
+    .sub-panel {
+      padding: 7px 8px;
+      display: flex;
+      flex-direction: column;
+    }
+    .sub-header {
+      font-size: 10.5px;
+      font-weight: 900;
+      color: #fcd34d;
+      border-bottom: 1px solid rgba(110, 160, 255, 0.45);
+      padding-bottom: 3px;
+      margin-bottom: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #submenu-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+    }
+    .main-cmd-panel {
+      padding: 5px 6px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    #party-panel {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+    }
+    .hero-card {
+      background: linear-gradient(180deg, #162e78 0%, #09133a 100%);
+      border: 1.5px solid #6b93e6;
+      border-radius: 5px;
+      padding: 4px 5px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .hero-card.acting {
+      border-color: #ffd43b;
+      box-shadow: 0 0 9px rgba(255, 212, 59, 0.78);
+      transform: translateY(-2px);
+    }
+    .hero-card.limit-ready {
+      border-color: #fb923c;
+      box-shadow: 0 0 11px rgba(251, 146, 60, 0.95);
+    }
+    .bar-mini {
+      width: 100%;
+      height: 5px;
+      background: #0f172a;
+      border-radius: 99px;
+      overflow: hidden;
+      margin-top: 2px;
+    }
+    .bar-mini-fill {
+      height: 100%;
+      transition: width 0.3s;
+    }
+    .ready-blink {
+      animation: blinkR 0.6s infinite alternate;
+    }
+    @keyframes blinkR {
+      from { opacity: 0.55; }
+      to   { opacity: 1; text-shadow: 0 0 6px #ffd43b; }
+    }
+
+    /* ---------------- SCENE 4: VICTORY & POSTER ---------------- */
+    #scene-victory {
+      padding: 44px 12px 14px;
+      justify-content: space-between;
+    }
+    .vic-layer {
+      position: relative;
+      z-index: 10;
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-y: auto;
+    }
+    .poster-box {
+      padding: 12px;
+      text-align: center;
+      margin: auto 0;
+      border-color: #fde047;
+    }
+    .mantra-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin: 10px 0;
+      text-align: left;
+    }
+    .mantra-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(6, 11, 30, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 5px;
+      padding: 5px 8px;
+      font-size: 11.5px;
+      font-weight: 800;
+    }
+    .mantra-badge {
+      width: 24px;
+      height: 24px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 900;
+      border: 1.5px solid rgba(255, 255, 255, 0.75);
+      flex-shrink: 0;
+    }
+    .vic-btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .vic-btn {
+      padding: 10px;
+      font-size: 12.5px;
+      font-weight: 900;
+      color: #ffffff;
+      cursor: pointer;
+    }
+    .vic-btn:active { transform: scale(0.96); }
+  </style>
+</head>
+<body>
+  <div id="app-shell">
+    <div class="scanlines"></div>
+    <div id="flash-layer"></div>
+
+    <!-- ================= TOP CONTROL BAR ================= -->
+    <header class="top-bar">
+      <div class="top-brand">
+        <span class="dot-live"></span>
+        <span>大庄國小 71 週年校慶 RPG</span>
+      </div>
+      <div class="top-actions">
+        <button id="btn-mode-toggle" class="top-btn top-btn-auto" type="button">▶ 自動演出</button>
+        <button id="btn-audio-toggle" class="top-btn top-btn-icon" type="button" title="音效開關">🔊</button>
+        <button id="btn-restart" class="top-btn top-btn-icon" type="button" title="回主畫面">↻</button>
+      </div>
+    </header>
+
+    <!-- ================= SCENE 1: TITLE SCREEN ================= -->
+    <section id="scene-title" class="scene">
+      <canvas id="canvas-title" width="360" height="640" class="bg-canvas"></canvas>
+
+      <div class="title-head">
+        <div class="date-pill">2026 年 12 月 12 日（六）上午 8:00</div>
+        <h1 class="title-gold title-main">大庄國小 71 週年<br />校慶運動會大作戰</h1>
+        <p class="title-sub">～ 最終決戰：日晷混沌・操場巨神 ～</p>
+      </div>
+
+      <div style="flex:1"></div>
+
+      <div class="ff-box title-menu-wrap">
+        <div id="title-opt-auto" class="cmd-row selected" style="font-size:13px;">
+          <span class="glove">👉</span>
+          <span>▶ AUTO PLAY</span>
+        </div>
+        <div id="title-opt-manual" class="cmd-row" style="font-size:13px; margin-top:2px;">
+          <span class="glove invisible">👉</span>
+          <span>🎮 START PLAY</span>
+        </div>
+        <div id="title-opt-cast" class="cmd-row" style="font-size:12px; margin-top:4px; border-top:1px solid rgba(110,160,255,0.4); color:#a5f3fc;">
+          <span class="glove invisible">👉</span>
+          <span>👥 角色立繪檢視</span>
+        </div>
+      </div>
+
+      <p class="title-foot">全校親師生齊心撐過 6 個時間回合・安全無傷・整潔滿分！</p>
+
+      <!-- Character Showcase Modal -->
+      <div id="modal-cast" class="hidden">
+        <div class="ff-box modal-inner">
+          <div class="modal-head">
+            <span style="font-size:13px; font-weight:900; color:#fde047;">👥 4 位主角像素立繪檢視</span>
+            <button id="btn-close-cast" type="button" style="background:#dc2626; color:#fff; border:1px solid #fff; border-radius:4px; padding:3px 9px; font-size:11px; font-weight:900; cursor:pointer;">✕ 關閉</button>
+          </div>
+          <div id="cast-grid" class="cast-grid"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SCENE 2: CAMPUS OVERWORLD MAP ================= -->
+    <section id="scene-explore" class="scene hidden">
+      <div class="explore-top">
+        <div id="explore-narration" class="ff-narration" style="padding:6px 9px; font-size:11.5px; font-weight:800; line-height:1.4;">
+          2026 年 12 月 12 日上午 8:00，大庄國小 71 週年校慶運動會即將揭幕！
+        </div>
+      </div>
+
+      <div class="gear-bar">
+        <span style="color:#fde047;">夥伴集結：</span>
+        <span id="gear-0" class="gear-pill">🎺 暖身口哨</span>
+        <span id="gear-1" class="gear-pill">💧 滿滿開水壺</span>
+        <span id="gear-2" class="gear-pill">♻️ 環保分類袋</span>
+      </div>
+
+      <div class="explore-stage">
+        <canvas id="canvas-explore" width="360" height="420"></canvas>
+
+        <!-- Manual Mode D-Pad & Investigate Button -->
+        <div id="explore-controls" class="hidden">
+          <div class="dpad-grid">
+            <div></div>
+            <button data-dir="up" class="dpad-btn" type="button">▲</button>
+            <div></div>
+            <button data-dir="left" class="dpad-btn" type="button">◀</button>
+            <div></div>
+            <button data-dir="right" class="dpad-btn" type="button">▶</button>
+            <div></div>
+            <button data-dir="down" class="dpad-btn" type="button">▼</button>
+            <div></div>
+          </div>
+          <button id="btn-explore-act" class="btn-investigate" type="button">🔍 調查</button>
+        </div>
+      </div>
+
+      <div class="explore-dialog-wrap">
+        <div class="ff-box dialog-box">
+          <div class="portrait-frame">
+            <canvas id="canvas-portrait" width="48" height="48" style="width:100%; height:100%;"></canvas>
+          </div>
+          <div class="dialog-text-wrap">
+            <div id="explore-speaker" class="speaker-name">大庄健將</div>
+            <p id="explore-dialogue" class="dialog-body">
+              「2026 年 12 月 12 日上午 8:00，大庄國小 71 週年校慶運動會即將揭幕！快在操場與夥伴會合，做好賽前準備吧！」
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SCENE 3: 6-ROUND 4-MENU JRPG BATTLE ================= -->
+    <section id="scene-battle" class="scene hidden">
+      <div class="boss-hud">
+        <div class="boss-hud-row">
+          <div style="display:flex; align-items:center; gap:5px; min-width:0;">
+            <span class="badge badge-boss">BOSS</span>
+            <span style="font-size:12px; font-weight:900; color:#fde047; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">日晷混沌・操場巨神</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:4px; flex-shrink:0;">
+            <span id="hud-round-badge" class="badge badge-round font-mono-px">01/06</span>
+            <span id="hud-clean-badge" class="badge badge-clean">整潔 100%</span>
+          </div>
+        </div>
+        <div class="hp-track">
+          <div id="boss-hp-fill"></div>
+          <div id="boss-hp-label" class="font-mono-px">HP 10000 / 10000</div>
+        </div>
+      </div>
+
+      <div class="battle-stage">
+        <canvas id="canvas-battle" width="360" height="300"></canvas>
+
+        <!-- Dynamic Action / Trap Warning Banner -->
+        <div id="battle-banner" class="hidden ff-banner">
+          <div id="battle-banner-sub"></div>
+          <div id="battle-banner-main"></div>
+        </div>
+
+        <div id="battle-time-tag">時間回合：01/06｜08:00 開幕暖身</div>
+      </div>
+
+      <div class="battle-ui">
+        <div class="cmd-grid">
+          <!-- Left: Sub-Menu / Battle Log -->
+          <div class="ff-box sub-panel">
+            <div id="submenu-header" class="sub-header">戰鬥情報</div>
+            <div id="submenu-body">
+              <p style="margin:0; font-size:11.5px; font-weight:700; color:#dbeafe; line-height:1.45;">
+                ⚠️ 警報！操場中央出現強烈熱浪與時間異常！
+              </p>
+            </div>
+          </div>
+
+          <!-- Right: 4 Classic JRPG Commands -->
+          <div class="ff-box main-cmd-panel">
+            <div id="main-cmd-attack" data-cmd="attack" class="cmd-row" style="font-size:12.5px; padding:4px 6px;">
+              <span class="glove invisible">👉</span><span>攻擊</span>
+            </div>
+            <div id="main-cmd-skill" data-cmd="skill" class="cmd-row" style="font-size:12.5px; padding:4px 6px;">
+              <span class="glove invisible">👉</span><span>特技</span>
+            </div>
+            <div id="main-cmd-item" data-cmd="item" class="cmd-row" style="font-size:12.5px; padding:4px 6px;">
+              <span class="glove invisible">👉</span><span>道具</span>
+            </div>
+            <div id="main-cmd-defend" data-cmd="defend" class="cmd-row" style="font-size:12.5px; padding:4px 6px;">
+              <span class="glove invisible">👉</span><span id="main-cmd-defend-label">防禦</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Protagonists HP & ATB Status Cards -->
+        <div id="party-panel"></div>
+      </div>
+    </section>
+
+    <!-- ================= SCENE 4: VICTORY & INVITATION POSTER ================= -->
+    <section id="scene-victory" class="scene hidden">
+      <canvas id="canvas-victory" width="360" height="640" class="bg-canvas"></canvas>
+
+      <!-- Phase A: VICTORY / LEVEL UP -->
+      <div id="victory-phase-a" class="vic-layer">
+        <div style="text-align:center; margin-top:8px;">
+          <div class="title-gold font-mono-px" style="font-size:32px; letter-spacing:2px;">VICTORY!</div>
+          <p style="margin:4px 0 0; font-size:12.5px; font-weight:900; color:#fef3c7; text-shadow:0 2px 4px #000;">
+            LEVEL UP！日晷混沌・操場巨神 擊破！
+          </p>
+        </div>
+        <div style="flex:1"></div>
+        <div class="ff-box" style="padding:11px; font-size:12px; font-weight:800; line-height:1.6;">
+          <div style="color:#fde047; margin-bottom:4px;">★ 魔王敗北宣言 ★</div>
+          <div style="color:#ffffff;">「可惡……大家的暖身、補水、守秩序跟環保力量太強大了……祝你們校慶順利……！」</div>
+          <div style="color:#67e8f9; margin-top:6px;">全員 LEVEL UP！解鎖 71 週年校慶邀請海報！</div>
+        </div>
+      </div>
+
+      <!-- Phase B: Screenshot-Friendly Invitation Poster -->
+      <div id="victory-phase-b" class="vic-layer hidden">
+        <div class="ff-box poster-box">
+          <div style="display:inline-block; padding:2px 10px; border-radius:999px; background:#fbbf24; color:#0f172a; font-size:10.5px; font-weight:900; margin-bottom:4px;">
+            ★ 歡迎截圖分享・71 週年校慶邀請函 ★
+          </div>
+          <h2 class="title-gold" style="margin:2px 0 8px; font-size:20px; font-weight:900;">大庄國小 71 週年校慶運動會</h2>
+
+          <div style="background:rgba(6,10,26,0.82); border:1.5px solid rgba(253,224,71,0.7); border-radius:7px; padding:8px; margin-bottom:8px;">
+            <div style="font-size:13.5px; font-weight:900; color:#ffffff;">📅 時間：2026 年 12 月 12 日（六）上午 8:00</div>
+            <div style="font-size:12.5px; font-weight:900; color:#67e8f9; margin-top:3px;">📍 地點：大庄國小操場</div>
+            <div style="font-size:11.5px; font-weight:800; color:#fde68a; margin-top:3px;">「親師生齊心同樂，不見不散！」</div>
+          </div>
+
+          <div class="mantra-list">
+            <div class="mantra-item">
+              <span class="mantra-badge" style="background:linear-gradient(135deg,#f43f5e,#b91c1c);">暖</span>
+              <span>【暖】動態暖身 — 伸展活絡筋骨，遠離抽筋受傷</span>
+            </div>
+            <div class="mantra-item">
+              <span class="mantra-badge" style="background:linear-gradient(135deg,#38bdf8,#1d4ed8);">水</span>
+              <span>【水】隨時補水 — 補充白開水與防曬，活力滿載</span>
+            </div>
+            <div class="mantra-item">
+              <span class="mantra-badge" style="background:linear-gradient(135deg,#fbbf24,#d97706);">守</span>
+              <span>【守】堅守線外 — 場邊安全線外應援，選手安心衝刺</span>
+            </div>
+            <div class="mantra-item">
+              <span class="mantra-badge" style="background:linear-gradient(135deg,#34d399,#047857);">淨</span>
+              <span>【淨】垃圾不落地 — 隨手分類帶走，守護最美大庄</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="vic-btn-row">
+          <button id="btn-vic-replay" class="ff-box vic-btn" type="button">↻ 再玩一次</button>
+          <button id="btn-vic-switch" class="ff-box vic-btn" type="button" style="color:#fde047; border-color:#fde047;">🎮 切換手動挑戰</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    "use strict";
+
+    /* ==========================================================================
+     * 1. SAFE WEB AUDIO API 8-BIT CHIPTUNE SYNTHESIZER (Initialized on User Gesture)
+     * ========================================================================== */
+    class SoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.muted = false;
+        this.bgmTimer = null;
+        this.track = null;
+        this.step = 0;
+      }
+
+      init() {
+        try {
+          if (!this.ctx) {
+            const AC = window.AudioContext || window.webkitAudioContext;
+            if (AC) this.ctx = new AC();
+          }
+          if (this.ctx && this.ctx.state === "suspended") {
+            this.ctx.resume().catch(() => {});
+          }
+        } catch (e) {}
+      }
+
+      setMuted(m) {
+        this.muted = m;
+        if (m) this.stopBGM();
+        else if (this.track) this.playBGM(this.track);
+      }
+
+      tone(freq, dur, type = "square", vol = 0.055, delay = 0, slide = null) {
+        if (this.muted || !this.ctx || !freq) return;
+        try {
+          const t0 = this.ctx.currentTime + delay;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, t0);
+          if (slide) osc.frequency.exponentialRampToValueAtTime(Math.max(25, slide), t0 + dur);
+          gain.gain.setValueAtTime(vol, t0);
+          gain.gain.exponentialRampToValueAtTime(0.0008, t0 + dur);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(t0);
+          osc.stop(t0 + dur + 0.02);
+        } catch (e) {}
+      }
+
+      noise(dur = 0.16, vol = 0.08, delay = 0) {
+        if (this.muted || !this.ctx) return;
+        try {
+          const len = Math.max(1, Math.floor(this.ctx.sampleRate * dur));
+          const buf = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
+          const data = buf.getChannelData(0);
+          for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+          const src = this.ctx.createBufferSource();
+          src.buffer = buf;
+          const gain = this.ctx.createGain();
+          const t0 = this.ctx.currentTime + delay;
+          gain.gain.setValueAtTime(vol, t0);
+          gain.gain.exponentialRampToValueAtTime(0.001, t0 + dur);
+          src.connect(gain);
+          gain.connect(this.ctx.destination);
+          src.start(t0);
+        } catch (e) {}
+      }
+
+      sfxCursor() { this.tone(920, 0.04, "square", 0.05); }
+      sfxConfirm() {
+        this.tone(660, 0.05, "square", 0.06, 0);
+        this.tone(1046, 0.09, "square", 0.06, 0.045);
+      }
+      sfxError() {
+        this.tone(185, 0.12, "sawtooth", 0.09, 0, 120);
+        this.tone(130, 0.22, "sawtooth", 0.09, 0.11, 85);
+      }
+      sfxStep() { this.noise(0.03, 0.025); }
+      sfxExclaim() {
+        this.tone(1175, 0.065, "square", 0.065, 0);
+        this.tone(1568, 0.13, "square", 0.065, 0.06);
+      }
+      sfxEncounter() {
+        for (let i = 0; i < 7; i++) this.tone(260 + i * 95, 0.06, "sawtooth", 0.075, i * 0.045);
+        this.noise(0.3, 0.1, 0.2);
+      }
+      sfxBossHit() {
+        this.tone(210, 0.24, "sawtooth", 0.085, 0, 65);
+        this.noise(0.2, 0.1, 0.05);
+      }
+      sfxShield() { [523, 659, 784, 1046, 1318].forEach((n, i) => this.tone(n, 0.13, "triangle", 0.085, i * 0.05)); }
+      sfxHeal() { [587, 740, 880, 1175, 1480].forEach((n, i) => this.tone(n, 0.14, "sine", 0.085, i * 0.055)); }
+      sfxSlash() {
+        for (let i = 0; i < 4; i++) {
+          this.noise(0.065, 0.09, i * 0.075);
+          this.tone(520 + i * 165, 0.08, "square", 0.07, i * 0.075, 220);
+        }
+      }
+      sfxMiss() { this.tone(740, 0.055, "triangle", 0.06, 0, 990); }
+      sfxSummon() { for (let i = 0; i < 12; i++) this.tone(240 + i * 85, 0.13, "sawtooth", 0.06, i * 0.08); }
+      sfxLaser() {
+        this.noise(0.9, 0.12, 0);
+        this.tone(160, 0.85, "sawtooth", 0.09, 0, 960);
+        this.tone(330, 0.85, "square", 0.065, 0.05, 1300);
+      }
+      sfxExplosion() {
+        this.noise(0.6, 0.14, 0);
+        this.tone(130, 0.5, "sawtooth", 0.1, 0, 40);
+      }
+      sfxFanfare() {
+        const notes = [523, 523, 523, 659, 784, 659, 784, 1046];
+        const times = [0, 0.11, 0.22, 0.34, 0.5, 0.68, 0.8, 0.96];
+        notes.forEach((n, i) => this.tone(n, 0.18, "square", 0.065, times[i]));
+      }
+
+      stopBGM() {
+        if (this.bgmTimer) {
+          clearInterval(this.bgmTimer);
+          this.bgmTimer = null;
+        }
+      }
+
+      playBGM(name) {
+        this.track = name;
+        this.stopBGM();
+        if (this.muted || !this.ctx) return;
+        this.step = 0;
+        const tracks = {
+          explore: {
+            tempo: 175,
+            lead: [523, 659, 784, 659, 880, 784, 659, 587, 523, 587, 659, 784, 659, 0, 587, 0],
+            bass: [262, 0, 196, 0, 220, 0, 196, 0, 175, 0, 196, 0, 262, 0, 196, 0]
+          },
+          battle: {
+            tempo: 124,
+            lead: [
+              330, 330, 392, 440, 330, 494, 440, 392,
+              330, 330, 523, 494, 440, 392, 330, 294,
+              330, 440, 494, 523, 587, 523, 494, 440,
+              659, 587, 523, 494, 440, 392, 330, 0
+            ],
+            bass: [
+              110, 110, 131, 147, 110, 110, 147, 131,
+              110, 110, 165, 147, 131, 123, 110, 98,
+              110, 110, 147, 165, 175, 165, 147, 131,
+              165, 165, 147, 131, 123, 110, 98, 98
+            ]
+          },
+          victory: {
+            tempo: 155,
+            lead: [523, 659, 784, 1046, 880, 784, 659, 784, 523, 659, 784, 659, 587, 659, 523, 0],
+            bass: [262, 0, 196, 0, 220, 0, 196, 0, 175, 0, 196, 0, 262, 196, 262, 0]
+          }
+        };
+        const t = tracks[name];
+        if (!t) return;
+        this.bgmTimer = setInterval(() => {
+          if (this.muted || !this.ctx) return;
+          const i = this.step % t.lead.length;
+          if (t.lead[i]) this.tone(t.lead[i], (t.tempo / 1000) * 0.8, "square", 0.028);
+          if (t.bass[i]) this.tone(t.bass[i], (t.tempo / 1000) * 0.85, "triangle", 0.04);
+          this.step++;
+        }, t.tempo);
+      }
+    }
+    const SFX = new SoundEngine();
+
+    /* ==========================================================================
+     * 2. OFFSCREEN PIXEL SPRITE (36x48) & PORTRAIT (48x48) BANK
+     *    All 4 Protagonists with Exact Outfits, Hairstyles & Accessories
+     * ========================================================================== */
+    const SpriteBank = {
+      sprites: {},
+      portraits: {},
+
+      makeCanvas(w, h, fn) {
+        const c = document.createElement("canvas");
+        c.width = w;
+        c.height = h;
+        const ctx = c.getContext("2d");
+        ctx.imageSmoothingEnabled = false;
+        const r = (x, y, rw, rh, col) => {
+          ctx.fillStyle = col;
+          ctx.fillRect(Math.round(x), Math.round(y), Math.round(rw), Math.round(rh));
+        };
+        const box = (x, y, rw, rh, fill, ol = "#181425") => {
+          r(x - 1, y, rw + 2, rh, ol);
+          r(x, y - 1, rw, rh + 2, ol);
+          r(x, y, rw, rh, fill);
+        };
+        fn(r, box, ctx);
+        return c;
+      },
+
+      init() {
+        ["runner", "teacher", "parent", "eco"].forEach(role => {
+          this.sprites[role] = {
+            idle0: this.buildFullSprite(role, 0, false),
+            idle1: this.buildFullSprite(role, 1, false),
+            stepL: this.buildFullSprite(role, -1, false),
+            stepR: this.buildFullSprite(role, 2, false),
+            flash: this.buildFullSprite(role, 0, true)
+          };
+          this.portraits[role] = this.buildPortrait(role);
+        });
+      },
+
+      buildFullSprite(role, frame = 0, isFlash = false) {
+        return this.makeCanvas(36, 48, (r, box) => {
+          const OL = "#181425";
+          const breathe = frame === 1 ? 1 : 0;
+          const legL = frame === -1 ? -2 : frame === 2 ? 1 : 0;
+          const legR = frame === 2 ? -2 : frame === -1 ? 1 : 0;
+          const armSwing = frame === -1 ? 1 : frame === 2 ? -1 : 0;
+
+          if (role === "runner") {
+            // 1. 大庄健將: Twin black braids, rosy cheeks, orange-and-grey PE Polo, dark grey shorts, white mid-calf socks, white sneakers
+            const skin = isFlash ? "#fff" : "#fbd4b4";
+            const skinS = isFlash ? "#fff" : "#e6ae87";
+            const grey = isFlash ? "#fff" : "#b8bcc2";
+            const greyS = isFlash ? "#fff" : "#969ba3";
+            const org = isFlash ? "#fff" : "#f07b26";
+            const orgS = isFlash ? "#fff" : "#c85b12";
+            const shrt = isFlash ? "#fff" : "#4d5259";
+            const hair = "#1a1c2c";
+            const hairH = "#383d5c";
+
+            box(13, 34 + legL, 4, 6, skin, OL);
+            r(13, 38 + legL, 4, 4, "#f8fafc");
+            r(13, 38 + legL, 4, 1, "#cbd5e1");
+            box(11, 42 + legL, 6, 4, "#f8fafc", OL);
+            r(11, 45 + legL, 6, 1, "#94a3b8");
+
+            box(19, 34 + legR, 4, 6, skin, OL);
+            r(19, 38 + legR, 4, 4, "#f8fafc");
+            r(19, 38 + legR, 4, 1, "#cbd5e1");
+            box(19, 42 + legR, 6, 4, "#f8fafc", OL);
+            r(19, 45 + legR, 6, 1, "#94a3b8");
+
+            box(12, 29 + breathe, 12, 6, shrt, OL);
+            r(17, 32 + breathe, 2, 3, OL);
+
+            box(8, 20 + breathe - armSwing, 3, 8, skin, OL);
+            box(7, 18 + breathe - armSwing, 5, 5, org, OL);
+            r(7, 22 + breathe - armSwing, 5, 1, orgS);
+
+            box(25, 20 + breathe + armSwing, 3, 8, skin, OL);
+            box(24, 18 + breathe + armSwing, 5, 5, org, OL);
+            r(24, 22 + breathe + armSwing, 5, 1, orgS);
+
+            box(12, 18 + breathe, 12, 11, grey, OL);
+            r(12, 27 + breathe, 12, 2, greyS);
+            r(12, 19 + breathe, 2, 10, org);
+            r(22, 19 + breathe, 2, 10, org);
+            r(14, 17 + breathe, 8, 3, org);
+            r(17, 19 + breathe, 2, 5, org);
+            r(17, 20 + breathe, 1, 1, "#ffffff");
+            r(19, 21 + breathe, 2, 2, org);
+            r(20, 21 + breathe, 1, 1, "#ffffff");
+
+            r(16, 16 + breathe, 4, 2, skinS);
+            box(11, 5 + breathe, 14, 11, skin, OL);
+            r(11, 14 + breathe, 14, 2, skinS);
+            box(10, 2 + breathe, 16, 6, hair, OL);
+            r(12, 3 + breathe, 5, 2, hairH);
+            r(10, 6 + breathe, 2, 6, hair);
+            r(24, 6 + breathe, 2, 6, hair);
+            r(12, 7 + breathe, 3, 2, hair);
+            r(16, 7 + breathe, 4, 2, hair);
+            r(21, 7 + breathe, 3, 2, hair);
+            r(13, 10 + breathe, 2, 3, OL); r(13, 10 + breathe, 1, 1, "#ffffff");
+            r(19, 10 + breathe, 2, 3, OL); r(19, 10 + breathe, 1, 1, "#ffffff");
+            r(11, 12 + breathe, 2, 1, "#ff7b8a");
+            r(21, 12 + breathe, 2, 1, "#ff7b8a");
+            r(15, 13 + breathe, 4, 2, "#9f1239");
+            r(15, 13 + breathe, 4, 1, "#ffffff");
+
+            const drawBraid = (bx, by) => {
+              for (let k = 0; k < 5; k++) {
+                box(bx + (k % 2 === 0 ? 0 : 1), by + k * 2, 2, 2, k % 2 === 0 ? hair : hairH, OL);
+              }
+              r(bx, by + 10, 3, 1, "#f07b26");
+              r(bx + 1, by + 11, 2, 2, hair);
+            };
+            drawBraid(10, 14 + breathe);
+            drawBraid(23, 14 + breathe);
+
+          } else if (role === "teacher") {
+            // 2. 體育老師: Muscular smiling male PE teacher, black buzz cut, navy blue Polo w/ white emblem + silver whistle on black lanyard, black shorts, white socks, black sneakers
+            const skin = isFlash ? "#fff" : "#e29b6c";
+            const skinS = isFlash ? "#fff" : "#c07447";
+            const navy = isFlash ? "#fff" : "#253a5c";
+            const navyS = isFlash ? "#fff" : "#182740";
+            const navyH = isFlash ? "#fff" : "#3a5582";
+            const blk = isFlash ? "#fff" : "#1e2126";
+
+            box(12, 35 + legL, 5, 5, skin, OL);
+            r(12, 39 + legL, 5, 3, "#f8fafc");
+            box(10, 42 + legL, 7, 4, blk, OL);
+            r(11, 45 + legL, 6, 1, "#475569");
+
+            box(19, 35 + legR, 5, 5, skin, OL);
+            r(19, 39 + legR, 5, 3, "#f8fafc");
+            box(19, 42 + legR, 7, 4, blk, OL);
+            r(19, 45 + legR, 6, 1, "#475569");
+
+            box(11, 29 + breathe, 14, 7, blk, OL);
+            r(17, 33 + breathe, 2, 3, "#0b0d11");
+
+            box(5, 19 + breathe - armSwing, 4, 10, skin, OL);
+            r(5, 22 + breathe - armSwing, 4, 2, skinS);
+            box(4, 16 + breathe - armSwing, 6, 6, navy, OL);
+
+            box(27, 19 + breathe + armSwing, 4, 10, skin, OL);
+            r(27, 22 + breathe + armSwing, 4, 2, skinS);
+            box(26, 16 + breathe + armSwing, 6, 6, navy, OL);
+
+            box(10, 16 + breathe, 16, 13, navy, OL);
+            r(10, 27 + breathe, 16, 2, navyS);
+            r(11, 17 + breathe, 14, 2, navyH);
+            r(14, 15 + breathe, 8, 3, navyS);
+            r(21, 19 + breathe, 3, 3, "#ffffff");
+            r(22, 20 + breathe, 1, 1, navy);
+            r(15, 16 + breathe, 1, 4, OL);
+            r(20, 16 + breathe, 1, 4, OL);
+            r(16, 20 + breathe, 4, 1, OL);
+            box(17, 21 + breathe, 2, 3, "#e2e8f0", OL);
+            r(17, 21 + breathe, 1, 1, "#ffffff");
+
+            r(15, 14 + breathe, 6, 2, skinS);
+            box(11, 3 + breathe, 14, 11, skin, OL);
+            r(11, 12 + breathe, 14, 2, skinS);
+            box(11, 1 + breathe, 14, 4, "#181425", OL);
+            r(11, 4 + breathe, 2, 3, "#181425");
+            r(23, 4 + breathe, 2, 3, "#181425");
+            r(12, 6 + breathe, 4, 1, OL);
+            r(19, 6 + breathe, 4, 1, OL);
+            r(13, 8 + breathe, 2, 2, OL); r(13, 8 + breathe, 1, 1, "#ffffff");
+            r(19, 8 + breathe, 2, 2, OL); r(19, 8 + breathe, 1, 1, "#ffffff");
+            r(14, 11 + breathe, 6, 2, "#9f1239");
+            r(14, 11 + breathe, 6, 1, "#ffffff");
+
+          } else if (role === "parent") {
+            // 3. 神隊友家長: Dark brown side ponytail, lavender-purple Polo, dark navy long pants, grey sneakers
+            const skin = isFlash ? "#fff" : "#fbd4b4";
+            const skinS = isFlash ? "#fff" : "#e4ab82";
+            const lav = isFlash ? "#fff" : "#a370c4";
+            const lavS = isFlash ? "#fff" : "#7e4e9e";
+            const lavH = isFlash ? "#fff" : "#c092e0";
+            const pants = isFlash ? "#fff" : "#293a5e";
+            const pantsS = isFlash ? "#fff" : "#1b2742";
+            const hair = "#3c2418";
+            const hairH = "#63402d";
+
+            box(8, 12 + breathe, 4, 7, hair, OL);
+            r(9, 13 + breathe, 2, 3, hairH);
+
+            box(12, 29 + breathe, 12, 13, pants, OL);
+            r(17, 33 + breathe, 2, 9, OL);
+            r(12, 30 + breathe, 2, 11, pantsS);
+            box(11, 42 + legL, 6, 4, "#9ea3ac", OL);
+            r(12, 43 + legL, 3, 1, "#ffffff");
+            r(11, 45 + legL, 6, 1, "#f8fafc");
+            box(19, 42 + legR, 6, 4, "#9ea3ac", OL);
+            r(20, 43 + legR, 3, 1, "#ffffff");
+            r(19, 45 + legR, 6, 1, "#f8fafc");
+
+            box(8, 20 + breathe - armSwing, 3, 9, skin, OL);
+            box(7, 18 + breathe - armSwing, 5, 5, lav, OL);
+            box(25, 20 + breathe + armSwing, 3, 9, skin, OL);
+            box(24, 18 + breathe + armSwing, 5, 5, lav, OL);
+
+            box(12, 18 + breathe, 12, 11, lav, OL);
+            r(12, 27 + breathe, 12, 2, lavS);
+            r(13, 19 + breathe, 10, 2, lavH);
+            r(14, 17 + breathe, 8, 2, lavS);
+            r(17, 18 + breathe, 2, 5, lavS);
+            r(17, 20 + breathe, 1, 1, "#f3e8ff");
+
+            r(16, 16 + breathe, 4, 2, skinS);
+            box(11, 5 + breathe, 14, 11, skin, OL);
+            r(11, 14 + breathe, 14, 2, skinS);
+            box(10, 2 + breathe, 16, 6, hair, OL);
+            r(12, 3 + breathe, 7, 2, hairH);
+            r(10, 6 + breathe, 3, 7, hair);
+            r(23, 6 + breathe, 3, 6, hair);
+            r(12, 7 + breathe, 7, 2, hair);
+            r(21, 7 + breathe, 2, 2, hair);
+            r(13, 10 + breathe, 2, 2, "#2d160c"); r(13, 10 + breathe, 1, 1, "#ffffff");
+            r(19, 10 + breathe, 2, 2, "#2d160c"); r(19, 10 + breathe, 1, 1, "#ffffff");
+            r(11, 12 + breathe, 2, 1, "#f48c9a");
+            r(21, 12 + breathe, 2, 1, "#f48c9a");
+            r(15, 13 + breathe, 4, 1, "#b45349");
+
+          } else if (role === "eco") {
+            // 4. 環保小尖兵: Black buzz cut, thick eyebrows, grey-and-orange PE Polo w/ left chest pocket, dark grey shorts, white socks, dark navy sneakers
+            const skin = isFlash ? "#fff" : "#e5a273";
+            const skinS = isFlash ? "#fff" : "#c47e4f";
+            const grey = isFlash ? "#fff" : "#b8bcc2";
+            const greyS = isFlash ? "#fff" : "#8f949e";
+            const org = isFlash ? "#fff" : "#f07b26";
+            const orgS = isFlash ? "#fff" : "#c85b12";
+            const shrt = isFlash ? "#fff" : "#4d5259";
+            const shoe = "#1e3a5f";
+
+            box(13, 34 + legL, 4, 6, skin, OL);
+            r(13, 38 + legL, 4, 4, "#f8fafc");
+            box(11, 42 + legL, 6, 4, shoe, OL);
+            r(11, 45 + legL, 6, 1, "#ffffff");
+
+            box(19, 34 + legR, 4, 6, skin, OL);
+            r(19, 38 + legR, 4, 4, "#f8fafc");
+            box(19, 42 + legR, 6, 4, shoe, OL);
+            r(19, 45 + legR, 6, 1, "#ffffff");
+
+            box(12, 29 + breathe, 12, 6, shrt, OL);
+            r(17, 32 + breathe, 2, 3, OL);
+
+            box(8, 20 + breathe - armSwing, 3, 8, skin, OL);
+            box(7, 18 + breathe - armSwing, 5, 5, org, OL);
+            r(7, 22 + breathe - armSwing, 5, 1, orgS);
+            box(25, 20 + breathe + armSwing, 3, 8, skin, OL);
+            box(24, 18 + breathe + armSwing, 5, 5, org, OL);
+            r(24, 22 + breathe + armSwing, 5, 1, orgS);
+
+            box(12, 18 + breathe, 12, 11, grey, OL);
+            r(12, 27 + breathe, 12, 2, greyS);
+            r(14, 17 + breathe, 8, 3, org);
+            r(17, 19 + breathe, 2, 5, org);
+            r(17, 20 + breathe, 1, 1, "#ffffff");
+            r(19, 21 + breathe, 4, 4, greyS);
+            r(20, 22 + breathe, 2, 2, grey);
+
+            r(16, 16 + breathe, 4, 2, skinS);
+            box(11, 5 + breathe, 14, 11, skin, OL);
+            r(11, 14 + breathe, 14, 2, skinS);
+            box(11, 2 + breathe, 14, 4, "#181425", OL);
+            r(11, 5 + breathe, 2, 3, "#181425");
+            r(23, 5 + breathe, 2, 3, "#181425");
+            r(12, 8 + breathe, 4, 1, OL);
+            r(19, 8 + breathe, 4, 1, OL);
+            r(13, 10 + breathe, 2, 2, OL); r(13, 10 + breathe, 1, 1, "#ffffff");
+            r(19, 10 + breathe, 2, 2, OL); r(19, 10 + breathe, 1, 1, "#ffffff");
+            r(14, 13 + breathe, 6, 2, OL);
+            r(14, 13 + breathe, 6, 1, "#ffffff");
+          }
+        });
+      },
+
+      buildPortrait(role) {
+        return this.makeCanvas(48, 48, (r, box, ctx) => {
+          const OL = "#181425";
+          const bgGrad = ctx.createLinearGradient(0, 0, 0, 48);
+          bgGrad.addColorStop(0, role === "runner" ? "#1e3a8a" : role === "teacher" ? "#172554" : role === "parent" ? "#4c1d95" : "#14532d");
+          bgGrad.addColorStop(1, "#0f172a");
+          ctx.fillStyle = bgGrad;
+          ctx.fillRect(0, 0, 48, 48);
+          ctx.fillStyle = "rgba(255,255,255,0.07)";
+          ctx.fillRect(0, 0, 18, 48);
+
+          if (role === "runner") {
+            box(8, 36, 32, 12, "#b8bcc2", OL);
+            r(8, 36, 6, 12, "#f07b26"); r(34, 36, 6, 12, "#f07b26");
+            r(16, 35, 16, 5, "#f07b26"); r(22, 39, 4, 9, "#f07b26");
+            r(23, 41, 2, 2, "#ffffff");
+            r(28, 41, 4, 4, "#f07b26"); r(29, 42, 2, 2, "#ffffff");
+            r(20, 32, 8, 5, "#e6ae87");
+            box(13, 12, 22, 21, "#fbd4b4", OL);
+            r(13, 30, 22, 3, "#e6ae87");
+            box(11, 5, 26, 11, "#1a1c2c", OL);
+            r(14, 7, 8, 3, "#383d5c");
+            r(11, 14, 4, 10, "#1a1c2c"); r(33, 14, 4, 10, "#1a1c2c");
+            r(15, 14, 5, 4, "#1a1c2c"); r(22, 14, 6, 5, "#1a1c2c"); r(29, 14, 4, 4, "#1a1c2c");
+            r(16, 20, 4, 5, OL); r(17, 21, 2, 2, "#ffffff");
+            r(28, 20, 4, 5, OL); r(29, 21, 2, 2, "#ffffff");
+            r(14, 26, 4, 2, "#ff7b8a"); r(30, 26, 4, 2, "#ff7b8a");
+            r(20, 27, 8, 4, "#9f1239"); r(20, 27, 8, 2, "#ffffff");
+            for (let k = 0; k < 5; k++) {
+              box(10 + (k % 2), 26 + k * 4, 4, 4, k % 2 ? "#383d5c" : "#1a1c2c", OL);
+              box(34 - (k % 2), 26 + k * 4, 4, 4, k % 2 ? "#383d5c" : "#1a1c2c", OL);
+            }
+          } else if (role === "teacher") {
+            box(4, 35, 40, 13, "#253a5c", OL);
+            r(16, 34, 16, 5, "#182740");
+            r(31, 40, 5, 5, "#ffffff"); r(33, 42, 1, 1, "#253a5c");
+            r(18, 35, 2, 7, OL); r(28, 35, 2, 7, OL); r(20, 41, 8, 2, OL);
+            box(22, 42, 4, 5, "#e2e8f0", OL); r(23, 43, 2, 2, "#ffffff");
+            r(18, 31, 12, 5, "#c07447");
+            box(13, 11, 22, 21, "#e29b6c", OL);
+            box(12, 6, 24, 7, "#181425", OL);
+            r(12, 11, 3, 6, "#181425"); r(33, 11, 3, 6, "#181425");
+            r(15, 15, 6, 2, OL); r(27, 15, 6, 2, OL);
+            r(16, 19, 4, 4, OL); r(17, 20, 2, 2, "#ffffff");
+            r(28, 19, 4, 4, OL); r(29, 20, 2, 2, "#ffffff");
+            r(19, 26, 10, 4, "#9f1239"); r(19, 26, 10, 2, "#ffffff");
+          } else if (role === "parent") {
+            box(7, 22, 8, 15, "#3c2418", OL);
+            r(9, 24, 3, 7, "#63402d");
+            box(9, 36, 30, 12, "#a370c4", OL);
+            r(16, 35, 16, 4, "#7e4e9e"); r(22, 38, 4, 9, "#7e4e9e");
+            r(23, 41, 2, 2, "#f3e8ff");
+            r(20, 32, 8, 5, "#e4ab82");
+            box(13, 12, 22, 21, "#fbd4b4", OL);
+            box(11, 5, 26, 10, "#3c2418", OL);
+            r(14, 7, 11, 3, "#63402d");
+            r(11, 13, 4, 12, "#3c2418"); r(33, 13, 4, 11, "#3c2418");
+            r(14, 14, 12, 4, "#3c2418");
+            r(16, 20, 4, 4, "#2d160c"); r(17, 21, 2, 2, "#ffffff");
+            r(28, 20, 4, 4, "#2d160c"); r(29, 21, 2, 2, "#ffffff");
+            r(14, 26, 4, 2, "#f48c9a"); r(30, 26, 4, 2, "#f48c9a");
+            r(20, 28, 8, 2, "#b45349");
+          } else if (role === "eco") {
+            box(8, 36, 32, 12, "#b8bcc2", OL);
+            r(8, 36, 6, 12, "#f07b26"); r(34, 36, 6, 12, "#f07b26");
+            r(16, 35, 16, 5, "#f07b26"); r(22, 39, 4, 9, "#f07b26");
+            r(23, 41, 2, 2, "#ffffff");
+            r(28, 41, 6, 6, "#8f949e"); r(29, 42, 4, 4, "#b8bcc2");
+            r(20, 32, 8, 5, "#c47e4f");
+            box(13, 12, 22, 21, "#e5a273", OL);
+            box(12, 7, 24, 7, "#181425", OL);
+            r(12, 12, 3, 6, "#181425"); r(33, 12, 3, 6, "#181425");
+            r(15, 16, 6, 2, OL); r(27, 16, 6, 2, OL);
+            r(16, 20, 4, 4, OL); r(17, 21, 2, 2, "#ffffff");
+            r(28, 20, 4, 4, OL); r(29, 21, 2, 2, "#ffffff");
+            r(18, 27, 12, 3, OL); r(19, 27, 10, 2, "#ffffff");
+          }
+        });
+      }
+    };
+
+    /* ==========================================================================
+     * 3. HD-2D ARENA, BOSS & SUMMON CUTSCENE RENDERER
+     * ========================================================================== */
+    const Art = {
+      px(ctx, x, y, w, h, col) {
+        ctx.fillStyle = col;
+        ctx.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h));
+      },
+
+      drawPortraitTo(canvas, role) {
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        ctx.imageSmoothingEnabled = false;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const p = SpriteBank.portraits[role];
+        if (p) ctx.drawImage(p, 0, 0, canvas.width, canvas.height);
+      },
+
+      drawHero(ctx, role, cx, cy, tick, opts = {}) {
+        const scale = opts.scale || 1.25;
+        const walking = opts.walking || false;
+        const bob = opts.jumpY || 0;
+        const dx = opts.dx || 0;
+        const dy = opts.dy || 0;
+
+        let frameKey = "idle0";
+        if (opts.hitFlash && Math.floor(tick / 2) % 2 === 0) {
+          frameKey = "flash";
+        } else if (walking) {
+          const wPhase = Math.floor(tick / 7) % 4;
+          frameKey = wPhase === 1 ? "stepL" : wPhase === 3 ? "stepR" : "idle0";
+        } else {
+          frameKey = Math.floor((tick + (opts.phase || 0) * 10) / 22) % 2 === 0 ? "idle0" : "idle1";
+        }
+
+        const sprite = SpriteBank.sprites[role][frameKey];
+        const sw = Math.round(36 * scale);
+        const sh = Math.round(48 * scale);
+
+        ctx.save();
+        ctx.imageSmoothingEnabled = false;
+        ctx.translate(Math.round(cx + dx), Math.round(cy + dy + bob));
+
+        // Ground shadow
+        ctx.fillStyle = "rgba(0, 0, 0, 0.45)";
+        ctx.beginPath();
+        ctx.ellipse(0, sh * 0.45 - bob * 0.35, sw * 0.34, 4.5, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (opts.reflect) {
+          ctx.save();
+          ctx.globalAlpha = 0.16;
+          ctx.scale(1, -0.35);
+          ctx.drawImage(sprite, -sw / 2, -sh * 1.45, sw, sh);
+          ctx.restore();
+        }
+
+        ctx.drawImage(sprite, Math.round(-sw / 2), Math.round(-sh * 0.52), sw, sh);
+
+        if (opts.activeArrow) {
+          const ay = -sh * 0.62 + Math.sin(tick * 0.25) * 3;
+          ctx.fillStyle = "#ffd43b";
+          ctx.strokeStyle = "#181425";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(0, ay + 8); ctx.lineTo(-6, ay); ctx.lineTo(6, ay); ctx.closePath();
+          ctx.fill(); ctx.stroke();
+        }
+
+        if (opts.shield) {
+          const pulse = 0.52 + Math.sin(tick * 0.18) * 0.2;
+          const grad = ctx.createRadialGradient(-4, -8, 4, 0, -2, sw * 0.64);
+          grad.addColorStop(0, "rgba(255, 255, 255, 0.28)");
+          grad.addColorStop(0.65, "rgba(62, 230, 255, 0.15)");
+          grad.addColorStop(1, `rgba(62, 230, 255, ${pulse})`);
+          ctx.fillStyle = grad;
+          ctx.strokeStyle = `rgba(165, 243, 252, ${pulse + 0.2})`;
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(0, -2, sw * 0.64, 0, Math.PI * 2);
+          ctx.fill(); ctx.stroke();
+        }
+
+        if (opts.limitAura) {
+          ctx.strokeStyle = `rgba(255, 212, 59, ${0.65 + Math.sin(tick * 0.35) * 0.35})`;
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.arc(0, -2, sw * 0.68 + Math.sin(tick * 0.25) * 2, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+
+        ctx.restore();
+      },
+
+      // Boss: 【日晷混沌・操場巨神】 with Violet-Purple PU Track Body, Golden Sundial Gears, Fireball & Trash Cyclone
+      drawBoss(ctx, cx, cy, tick, state = {}) {
+        if (state.defeated && state.fade <= 0) return;
+
+        ctx.save();
+        if (state.fade !== undefined && state.fade < 1) ctx.globalAlpha = Math.max(0, state.fade);
+        const scale = state.scale || 1;
+        const bob = Math.sin(tick * 0.075) * 4.5;
+        const sx = state.shake > 0 ? (Math.random() - 0.5) * state.shake : 0;
+        const lx = state.lungeX || 0;
+        ctx.translate(Math.round(cx + sx + lx), Math.round(cy + bob));
+        ctx.scale(scale, scale);
+
+        const flash = state.hitFlash > 0 && Math.floor(tick / 2) % 2 === 0;
+        const ol = "#12091d";
+
+        // Shadow
+        ctx.fillStyle = "rgba(10, 4, 24, 0.65)";
+        ctx.beginPath();
+        ctx.ellipse(0, 62 - bob * 0.4, 62, 14, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Spinning Golden Sundial Gear Aura behind body
+        ctx.save();
+        ctx.rotate(tick * 0.02);
+        ctx.strokeStyle = "rgba(255, 212, 59, 0.5)";
+        ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.arc(0, 0, 50, 0, Math.PI * 2); ctx.stroke();
+        for (let g = 0; g < 8; g++) {
+          const ga = (g / 8) * Math.PI * 2;
+          this.px(ctx, Math.cos(ga) * 51 - 4, Math.sin(ga) * 51 - 4, 8, 8, "#d97706");
+        }
+        ctx.restore();
+
+        // RIGHT HAND (Viewer Left): 掉棒與垃圾旋風
+        const armL = -58;
+        const armLY = -2 + Math.sin(tick * 0.13) * 3;
+        this.px(ctx, armL + 8, armLY - 7, 22, 14, ol);
+        this.px(ctx, armL + 10, armLY - 5, 18, 10, flash ? "#fff" : "#7c3aed");
+        this.px(ctx, armL + 10, armLY - 1, 18, 3, "#f8fafc");
+        for (let i = 0; i < 7; i++) {
+          const w = 10 + i * 6.5;
+          const sway = Math.sin(tick * 0.24 + i * 0.85) * 4.5;
+          ctx.fillStyle = flash ? "#fff" : `rgba(148, 163, 184, ${0.42 + (i % 2) * 0.3})`;
+          ctx.fillRect(armL - w / 2 + sway, armLY + 24 - i * 7, w, 4.5);
+        }
+        const r1 = tick * 0.17;
+        this.px(ctx, armL + Math.cos(r1) * 18 - 4, armLY - 8 + Math.sin(r1) * 9, 10, 3, "#ffd43b"); // Relay baton
+        this.px(ctx, armL + Math.cos(r1 + 2.1) * 16, armLY + 4 + Math.sin(r1 + 2.1) * 11, 5, 8, "#7dd3fc"); // Bottle
+        this.px(ctx, armL + Math.cos(r1 + 4.2) * 15, armLY - 14 + Math.sin(r1 + 4.2) * 8, 5, 5, "#f1f5f9"); // Paper
+
+        // LEFT HAND (Viewer Right): 烈日火球
+        const armR = 58;
+        const armRY = -4 + Math.cos(tick * 0.13) * 3;
+        this.px(ctx, armR - 30, armRY - 7, 22, 14, ol);
+        this.px(ctx, armR - 28, armRY - 5, 18, 10, flash ? "#fff" : "#7c3aed");
+        this.px(ctx, armR - 28, armRY - 1, 18, 3, "#f8fafc");
+        const fp = Math.sin(tick * 0.28) * 3;
+        const fGrad = ctx.createRadialGradient(armR, armRY - 10, 4, armR, armRY - 10, 28 + fp);
+        fGrad.addColorStop(0, "#fffbeb");
+        fGrad.addColorStop(0.35, "#ffd43b");
+        fGrad.addColorStop(0.65, "rgba(255, 72, 0, 0.86)");
+        fGrad.addColorStop(1, "rgba(255, 60, 0, 0)");
+        ctx.fillStyle = fGrad;
+        ctx.beginPath(); ctx.arc(armR, armRY - 10, 28 + fp, 0, Math.PI * 2); ctx.fill();
+        for (let f = 0; f < 5; f++) {
+          const fy = (tick * 1.4 + f * 9) % 26;
+          const fx = armR + Math.sin(tick * 0.22 + f * 1.8) * 12;
+          this.px(ctx, fx, armRY - 16 - fy, 3, 3, f % 2 ? "#ffe066" : "#ff4500");
+        }
+
+        // BODY: Violet-Purple PU Running Track Segments + White Lane Markings
+        this.px(ctx, -38, 22, 76, 28, ol);
+        this.px(ctx, -36, 24, 72, 24, flash ? "#fff" : "#5b21b6");
+        this.px(ctx, -34, 29, 68, 3, "#ffffff");
+        this.px(ctx, -34, 39, 68, 3, "#ffffff");
+
+        this.px(ctx, -46, -24, 92, 50, ol);
+        this.px(ctx, -44, -22, 88, 46, flash ? "#fff" : "#6d28d9");
+        this.px(ctx, -40, -18, 80, 38, flash ? "#fff" : "#8b5cf6");
+        this.px(ctx, -42, -12, 84, 3, "#f8fafc");
+        this.px(ctx, -42, 12, 84, 3, "#f8fafc");
+
+        // Giant Golden Stopwatch Dial Core
+        ctx.fillStyle = ol;
+        ctx.beginPath(); ctx.arc(0, 1, 27, 0, Math.PI * 2); ctx.fill();
+        const dialGrad = ctx.createRadialGradient(0, 1, 4, 0, 1, 24);
+        dialGrad.addColorStop(0, "#1e293b");
+        dialGrad.addColorStop(0.75, "#0f172a");
+        dialGrad.addColorStop(1, "#d97706");
+        ctx.fillStyle = flash ? "#fff" : dialGrad;
+        ctx.beginPath(); ctx.arc(0, 1, 24, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = "#ffd43b"; ctx.lineWidth = 2.5;
+        ctx.beginPath(); ctx.arc(0, 1, 23, 0, Math.PI * 2); ctx.stroke();
+        for (let t = 0; t < 12; t++) {
+          const a = (t / 12) * Math.PI * 2;
+          this.px(ctx, Math.cos(a) * 18 - 1, 1 + Math.sin(a) * 18 - 1, 2, 2, "#ffe066");
+        }
+        const ha = tick * 0.11;
+        ctx.strokeStyle = "#ff3b4e"; ctx.lineWidth = 2.5;
+        ctx.beginPath(); ctx.moveTo(0, 1); ctx.lineTo(Math.cos(ha) * 16, 1 + Math.sin(ha) * 16); ctx.stroke();
+        ctx.strokeStyle = "#3ee6ff"; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(0, 1); ctx.lineTo(Math.cos(ha * 0.25) * 11, 1 + Math.sin(ha * 0.25) * 11); ctx.stroke();
+
+        // Head & Sundial Crown
+        this.px(ctx, -22, -44, 44, 22, ol);
+        this.px(ctx, -20, -42, 40, 18, flash ? "#fff" : "#334155");
+        this.px(ctx, -16, -38, 32, 11, "#090d16");
+        this.px(ctx, -12, -35, 9, 5, "#ff2a4b");
+        this.px(ctx, 3, -35, 9, 5, "#ff2a4b");
+        this.px(ctx, -9, -34, 3, 2, "#fff6b8");
+        this.px(ctx, 6, -34, 3, 2, "#fff6b8");
+        this.px(ctx, -26, -50, 8, 12, ol); this.px(ctx, -25, -49, 6, 10, "#ffd43b");
+        this.px(ctx, 18, -50, 8, 12, ol);  this.px(ctx, 19, -49, 6, 10, "#ffd43b");
+        this.px(ctx, -4, -52, 8, 10, "#ffd43b");
+
+        // Floating Digital Countdown Timer Above Head (flashes red on Round 6)
+        const fy = -70 + Math.sin(tick * 0.14) * 3;
+        const isFinalRed = (state.roundNum === 6) && (Math.floor(tick / 8) % 2 === 0);
+        this.px(ctx, -30, fy, 60, 17, isFinalRed ? "#7f1d1d" : "#090e1f");
+        ctx.strokeStyle = isFinalRed ? "#ff3b4e" : "#3ee6ff";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(-30, fy, 60, 17);
+        ctx.fillStyle = isFinalRed ? "#ffffff" : "#ff3b4e";
+        ctx.font = "bold 11px Courier New, monospace";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(`0${Math.min(6, state.roundNum || 1)}/06`, 0, fy + 9);
+
+        ctx.restore();
+      },
+
+      // Battle / Title / Victory Campus Violet-Purple Track Backdrop
+      drawArenaBG(ctx, w, h, tick, isSunny = false) {
+        const sky = ctx.createLinearGradient(0, 0, 0, h * 0.52);
+        if (isSunny) {
+          sky.addColorStop(0, "#0ea5e9");
+          sky.addColorStop(0.6, "#7dd3fc");
+          sky.addColorStop(1, "#fef08a");
+        } else {
+          sky.addColorStop(0, "#0f0720");
+          sky.addColorStop(0.5, "#3b104e");
+          sky.addColorStop(1, "#8c2445");
+        }
+        ctx.fillStyle = sky;
+        ctx.fillRect(0, 0, w, h * 0.52);
+
+        if (isSunny) {
+          const sunG = ctx.createRadialGradient(w * 0.78, 42, 6, w * 0.78, 42, 58);
+          sunG.addColorStop(0, "#ffffff");
+          sunG.addColorStop(0.4, "#fef08a");
+          sunG.addColorStop(1, "rgba(254, 240, 138, 0)");
+          ctx.fillStyle = sunG;
+          ctx.beginPath(); ctx.arc(w * 0.78, 42, 58, 0, Math.PI * 2); ctx.fill();
+        } else {
+          ctx.fillStyle = "rgba(24, 10, 42, 0.58)";
+          for (let i = 0; i < 6; i++) {
+            const cx = ((i * 85 + tick * 0.3) % (w + 90)) - 45;
+            ctx.fillRect(cx, 16 + (i % 3) * 16, 68, 12);
+            ctx.fillRect(cx + 14, 9 + (i % 3) * 16, 42, 9);
+          }
+        }
+
+        const horizon = Math.floor(h * 0.48);
+        // School Building Silhouette
+        ctx.fillStyle = isSunny ? "#334155" : "#161129";
+        ctx.fillRect(10, horizon - 38, w - 20, 38);
+        ctx.fillRect(w / 2 - 28, horizon - 54, 56, 18);
+        ctx.fillStyle = isSunny ? "#fef9c3" : "#f59e0b";
+        for (let wx = 22; wx < w - 28; wx += 20) {
+          ctx.fillRect(wx, horizon - 28, 9, 7);
+          ctx.fillRect(wx, horizon - 15, 9, 7);
+        }
+
+        // Stadium Floodlights
+        [34, w - 34].forEach(lx => {
+          ctx.fillStyle = "#475569"; ctx.fillRect(lx - 2, horizon - 66, 4, 66);
+          ctx.fillStyle = "#fffbeb"; ctx.fillRect(lx - 11, horizon - 72, 22, 8);
+          const cone = ctx.createLinearGradient(lx, horizon - 64, lx, horizon + 60);
+          cone.addColorStop(0, "rgba(255, 245, 190, 0.22)");
+          cone.addColorStop(1, "rgba(255, 245, 190, 0)");
+          ctx.fillStyle = cone;
+          ctx.beginPath();
+          ctx.moveTo(lx - 10, horizon - 64); ctx.lineTo(lx + 10, horizon - 64);
+          ctx.lineTo(lx + 52, horizon + 70); ctx.lineTo(lx - 52, horizon + 70);
+          ctx.closePath(); ctx.fill();
+        });
+
+        // Green Infield & Violet-Purple PU Track
+        ctx.fillStyle = isSunny ? "#16a34a" : "#114732";
+        ctx.fillRect(0, horizon, w, 22);
+        const trackG = ctx.createLinearGradient(0, horizon + 18, 0, h);
+        trackG.addColorStop(0, isSunny ? "#8b5cf6" : "#5b21b6");
+        trackG.addColorStop(0.55, isSunny ? "#7c3aed" : "#4c1d95");
+        trackG.addColorStop(1, isSunny ? "#6d28d9" : "#2e1065");
+        ctx.fillStyle = trackG;
+        ctx.fillRect(0, horizon + 18, w, h - (horizon + 18));
+
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.42)";
+        ctx.lineWidth = 2;
+        for (let i = 0; i < 4; i++) {
+          const ly = horizon + 34 + i * 28;
+          ctx.beginPath(); ctx.moveTo(0, ly); ctx.lineTo(w, ly); ctx.stroke();
+        }
+      },
+
+      // Round 6 Full-Screen Summon Cutscene: 《大庄71週年・聖火守護神》 + 五力光波
+      drawSummonCutIn(ctx, w, h, progress, tick) {
+        const bg = ctx.createRadialGradient(w / 2, h / 2, 10, w / 2, h / 2, w);
+        bg.addColorStop(0, "#fff7b0");
+        bg.addColorStop(0.32, "#ff6b2b");
+        bg.addColorStop(0.7, "#7c0a28");
+        bg.addColorStop(1, "#12041a");
+        ctx.fillStyle = bg;
+        ctx.fillRect(0, 0, w, h);
+
+        // Anime Speedlines
+        ctx.save();
+        ctx.translate(w / 2, h / 2);
+        for (let i = 0; i < 28; i++) {
+          const a = (i / 28) * Math.PI * 2 + tick * 0.045;
+          ctx.strokeStyle = i % 2 === 0 ? "rgba(255, 245, 170, 0.5)" : "rgba(255, 80, 80, 0.35)";
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.moveTo(Math.cos(a) * 32, Math.sin(a) * 32);
+          ctx.lineTo(Math.cos(a) * 280, Math.sin(a) * 280);
+          ctx.stroke();
+        }
+        ctx.restore();
+
+        // Towering Golden-Armored Sacred Torch Guardian
+        const rise = Math.min(1, progress * 2.4);
+        const gx = w / 2;
+        const gy = h * 0.52 + (1 - rise) * 110;
+
+        // Crimson Cape
+        ctx.fillStyle = "#b91c1c";
+        ctx.beginPath();
+        ctx.moveTo(gx - 84, gy - 22); ctx.lineTo(gx + 92, gy - 22);
+        ctx.lineTo(gx + 132 + Math.sin(tick * 0.32) * 12, gy + 110);
+        ctx.lineTo(gx - 122 + Math.cos(tick * 0.32) * 10, gy + 110);
+        ctx.closePath(); ctx.fill();
+
+        // Golden-Armored Torso & Shoulders
+        this.px(ctx, gx - 80, gy - 32, 160, 80, "#92400e");
+        this.px(ctx, gx - 70, gy - 26, 140, 68, "#d97706");
+        this.px(ctx, gx - 86, gy - 36, 36, 36, "#f59e0b");
+        this.px(ctx, gx - 80, gy - 32, 24, 24, "#fde047");
+        this.px(ctx, gx + 50, gy - 36, 36, 36, "#f59e0b");
+        this.px(ctx, gx + 56, gy - 32, 24, 24, "#fde047");
+
+        // Glowing "71" Core
+        ctx.fillStyle = "#fef08a";
+        ctx.beginPath(); ctx.arc(gx, gy + 8, 32 + Math.sin(tick * 0.4) * 3, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "#f97316";
+        ctx.beginPath(); ctx.arc(gx, gy + 8, 24, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 22px Courier New, monospace";
+        ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        ctx.fillText("71", gx, gy + 9);
+
+        // Helmet & Blazing Sacred Flame Crown
+        this.px(ctx, gx - 32, gy - 78, 64, 48, "#f59e0b");
+        this.px(ctx, gx - 26, gy - 72, 52, 38, "#991b1b");
+        this.px(ctx, gx - 18, gy - 58, 12, 6, "#3ee6ff");
+        this.px(ctx, gx + 6, gy - 58, 12, 6, "#3ee6ff");
+        for (let fl = 0; fl < 7; fl++) {
+          const fh = 16 + Math.sin(tick * 0.4 + fl) * 8;
+          this.px(ctx, gx - 21 + fl * 7, gy - 78 - fh, 6, fh, fl % 2 ? "#fde047" : "#f97316");
+        }
+
+        // 五力光波: 5 Vivid Intersecting Energy Beams (Red, Gold, Emerald Green, Cyan, Violet Purple)
+        if (progress > 0.52) {
+          const bp = Math.min(1, (progress - 0.52) / 0.36);
+          const beams = [
+            { sy: h * 0.14, col: "rgba(239, 68, 68, 0.95)" },  // 紅
+            { sy: h * 0.30, col: "rgba(250, 204, 21, 0.96)" }, // 金
+            { sy: h * 0.48, col: "rgba(16, 185, 129, 0.95)" }, // 翠綠
+            { sy: h * 0.66, col: "rgba(56, 189, 248, 0.95)" }, // 青
+            { sy: h * 0.82, col: "rgba(139, 92, 246, 0.96)" }  // 紫羅蘭
+          ];
+          const targetX = w * (1 - bp);
+          const targetY = h * 0.48;
+          beams.forEach((b, idx) => {
+            const wave = Math.sin(tick * 0.45 + idx) * 6;
+            ctx.strokeStyle = b.col;
+            ctx.lineWidth = 18;
+            ctx.beginPath();
+            ctx.moveTo(w, b.sy + wave);
+            ctx.lineTo(targetX, targetY);
+            ctx.stroke();
+
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.65)";
+            ctx.lineWidth = 5;
+            ctx.beginPath();
+            ctx.moveTo(w, b.sy + wave);
+            ctx.lineTo(targetX, targetY);
+            ctx.stroke();
+          });
+
+          // Converging Impact Blast Sphere
+          const rad = 22 + bp * 54 + Math.sin(tick * 0.6) * 8;
+          const blastG = ctx.createRadialGradient(targetX, targetY, 4, targetX, targetY, rad);
+          blastG.addColorStop(0, "#ffffff");
+          blastG.addColorStop(0.5, "#fde047");
+          blastG.addColorStop(1, "rgba(139, 92, 246, 0)");
+          ctx.fillStyle = blastG;
+          ctx.beginPath(); ctx.arc(targetX, targetY, rad, 0, Math.PI * 2); ctx.fill();
+
+          if (progress > 0.85) {
+            ctx.fillStyle = `rgba(255, 255, 255, ${(progress - 0.85) * 6.5})`;
+            ctx.fillRect(0, 0, w, h);
+          }
+        }
+      }
+    };
+
+    /* ==========================================================================
+     * 4. HERO METADATA & EXACT 6-ROUND BATTLE SCRIPT
+     * ========================================================================== */
+    const HERO_INFO = [
+      { id: "runner",  name: "大庄健將",   title: "田徑領隊", hp: 1520, maxHp: 1520, atb: 78, desc: "黑色雙麻花辮、橘灰校服、白襪白鞋" },
+      { id: "teacher", name: "體育老師",   title: "熱血教練", hp: 1650, maxHp: 1650, atb: 88, desc: "黑平頭壯碩身材、深藍校隊衣、銀色哨子" },
+      { id: "parent",  name: "神隊友家長", title: "應援補給", hp: 1800, maxHp: 1800, atb: 72, desc: "深棕側馬尾、薰衣草紫衣、深藍長褲" },
+      { id: "eco",     name: "環保小尖兵", title: "校園淨化", hp: 1480, maxHp: 1480, atb: 68, desc: "黑平頭濃眉、橘灰口袋校服、深藍球鞋" }
+    ];
+
+    const ROUNDS = [
+      {
+        num: 1,
+        timeTag: "時間回合：01/06｜08:00 開幕動態暖身",
+        actorIdx: 1, // 體育老師
+        bossSkill: "僵硬抽筋衝擊波",
+        bossLine: "魔王蓄力發動「僵硬抽筋衝擊波」！",
+        bossPreAttack: false,
+        correctCmd: "defend",
+        autoDemoTrapCmd: "attack",
+        cmdMenus: {
+          attack: [
+            { label: "沒暖身直接衝刺", correct: false, trapDmg: 180, warning: "危險！未暖身直接劇烈衝刺極易拉傷抽筋！" }
+          ],
+          defend: [
+            {
+              label: "動態暖身操", correct: true,
+              bannerSub: "體育老師・防禦",
+              bannerMain: "動態暖身操！青色防禦護盾啟動！",
+              vfx: "shield", dmg: 1400, tagGrant: "暖身", bossMissAfter: true,
+              log: "體育老師吹響哨音！全員展開【動態暖身操】，青色防禦護盾啟動！魔王攻擊完全 MISS!"
+            }
+          ]
+        }
+      },
+      {
+        num: 2,
+        timeTag: "時間回合：02/06｜09:00 烈日防曬補水",
+        actorIdx: 2, // 神隊友家長
+        bossSkill: "烈日火球",
+        bossLine: "魔王左手揮出「烈日火球」，體力快速流失！",
+        bossPreAttack: true,
+        bossDmg: 340,
+        bossVfx: "fireball",
+        correctCmd: "item",
+        cmdMenus: {
+          item: [
+            { label: "含糖冰飲猛灌", correct: false, trapDmg: 160, warning: "NG！運動中猛灌含糖冰飲容易腸胃不適且更口渴！" },
+            {
+              label: "大口喝白開水", correct: true,
+              bannerSub: "神隊友家長・道具",
+              bannerMain: "大口喝白開水！HP 大幅回復並反擊烈日！",
+              vfx: "heal", heal: 450, dmg: 1500, tagGrant: "補水",
+              log: "神隊友家長遞上【滿滿開水壺】！全員補充水分並做好防曬，HP 大幅回復並反擊烈日！"
+            }
+          ]
+        }
+      },
+      {
+        num: 3,
+        timeTag: "時間回合：03/06｜10:00 場邊安全禮儀",
+        actorIdx: 2, // 神隊友家長
+        bossSkill: "場邊混亂干擾",
+        bossLine: "魔王發動「場邊混亂干擾」，企圖讓大家擠進跑道！",
+        bossPreAttack: true,
+        bossDmg: 240,
+        bossVfx: "wave",
+        correctCmd: "skill",
+        cmdMenus: {
+          skill: [
+            { label: "跨越跑道線拍照", correct: false, trapDmg: 180, warning: "危險！跨越跑道容易與高速奔跑的選手發生碰撞！" },
+            {
+              label: "堅守觀賽安全線", correct: true,
+              bannerSub: "神隊友家長・特技",
+              bannerMain: "堅守觀賽安全線！應援聲震天！",
+              vfx: "shield", dmg: 1500, tagGrant: "守線",
+              log: "神隊友家長帶頭【堅守觀賽安全線】！場邊秩序井然、應援聲震天，魔王防禦力大幅下降！"
+            }
+          ]
+        }
+      },
+      {
+        num: 4,
+        timeTag: "時間回合：04/06｜11:00 大隊接力・完美傳棒",
+        actorIdx: 0, // 大庄健將
+        bossSkill: "掉棒旋風",
+        bossLine: "魔王右手捲起「掉棒旋風」，干擾接力節奏！",
+        bossPreAttack: true,
+        bossDmg: 260,
+        bossVfx: "tornado",
+        correctCmd: "attack",
+        cmdMenus: {
+          attack: [
+            {
+              label: "接力區完美傳棒", correct: true,
+              bannerSub: "大庄健將・會心一擊",
+              bannerMain: "接力區完美傳棒！金光衝刺 CRITICAL！",
+              vfx: "slash", dmg: 2200,
+              log: "大庄健將全速衝刺！在接力區內完成【完美傳棒】，化成金光突破旋風，造成巨額傷害！"
+            },
+            { label: "提早跨線／掉棒亂撿", correct: false, trapDmg: 180, warning: "違規！未在接力區交棒會失格，掉棒應注意後方來車再撿！" }
+          ]
+        }
+      },
+      {
+        num: 5,
+        timeTag: "時間回合：05/06｜12:00 環保整潔・無痕校園",
+        actorIdx: 3, // 環保小尖兵
+        bossSkill: "垃圾風暴",
+        bossLine: "魔王釋放「垃圾風暴」，想把操場弄得一片狼藉！",
+        bossPreAttack: true,
+        bossDmg: 220,
+        bossVfx: "tornado",
+        correctCmd: "skill",
+        cmdMenus: {
+          skill: [
+            {
+              label: "垃圾不落地・淨化", correct: true,
+              bannerSub: "環保小尖兵・特技",
+              bannerMain: "垃圾不落地・淨化！風暴瞬間消散！",
+              vfx: "clean", dmg: 2100, tagGrant: "整潔",
+              log: "環保小尖兵發動【垃圾不落地】！全校師生與家長隨手帶走垃圾，風暴瞬間消散，魔王陷入虛弱！"
+            },
+            { label: "隨手丟在草皮上", correct: false, trapDmg: 180, warning: "不行！垃圾不僅破壞環境，也可能讓跑者滑倒受傷！" }
+          ]
+        }
+      },
+      {
+        num: 6,
+        timeTag: "時間回合：06/06｜最終決戰・71 週年聖火覺醒",
+        actorIdx: 0, // 全員合體
+        isFinal: true,
+        bossSkill: "終極倒數・混沌蓄能",
+        bossLine: "魔王蓄力最終大招，頭頂倒數計時器閃紅光！",
+        bossPreAttack: true,
+        bossDmg: 360,
+        bossVfx: "ult",
+        correctCmd: "defend", // Transforms into ★召喚
+        cmdMenus: {
+          defend: [
+            {
+              label: "大庄71週年・聖火守護神", correct: true, isSummon: true,
+              bannerSub: "★召喚・大庄71週年聖火守護神",
+              bannerMain: "五力光波一擊貫穿日晷巨神！！",
+              vfx: "summon", dmg: 9999,
+              log: "全校親師生元氣集滿！召喚【大庄 71 週年・聖火守護神】！五力光波一擊貫穿日晷巨神！"
+            }
+          ]
+        }
+      }
+    ];
+
+    /* ==========================================================================
+     * 5. MAIN GAME CONTROLLER
+     * ========================================================================== */
+    const Game = {
+      scene: "title",
+      autoMode: true,
+      tick: 0,
+      timers: [],
+      intervals: [],
+      summonRaf: null,
+
+      // Explore Map State
+      mapH: 760,
+      camY: 340,
+      player: { x: 180, y: 675, walking: false },
+      walkKeys: { up: false, down: false, left: false, right: false },
+      tapTarget: null,
+      exploreStep: 0,
+      exploreBusy: false,
+      exclaimTimer: 0,
+      encounterShutter: 0,
+      npcs: [
+        {
+          id: "teacher", name: "體育老師", x: 250, y: 510, met: false, gearIdx: 0,
+          notice: "獲得裝備【暖身口哨】！體育老師加入隊伍！",
+          dialogue: "「早安！今天是我們 71 週年校慶，上場前一定要先做好『動態暖身』，才能發揮最佳實力、遠離抽筋喔！」"
+        },
+        {
+          id: "parent", name: "神隊友家長", x: 112, y: 360, met: false, gearIdx: 1,
+          notice: "獲得道具【滿滿開水壺】！神隊友家長加入隊伍！",
+          dialogue: "「孩子加油！媽媽幫大家準備好裝滿白開水的水壺跟毛巾了，觀賽時我們也會乖乖待在安全線外加油喔！」"
+        },
+        {
+          id: "eco", name: "環保小尖兵", x: 236, y: 215, met: false, gearIdx: 2,
+          notice: "獲得裝備【環保分類袋】！環保小尖兵加入隊伍！",
+          dialogue: "「終於撿完跑道上的小石子！大家記得垃圾不落地、隨手做好分類，一起守護最美的大庄校園！」"
+        }
+      ],
+
+      // Battle State
+      roundIdx: 0,
+      bossHp: 10000,
+      bossMaxHp: 10000,
+      cleanScore: 100,
+      party: [],
+      heroAnim: [],
+      bossAnim: { roundNum: 1, shake: 0, hitFlash: 0, lungeX: 0, defeated: false, fade: 1 },
+      particles: [],
+      floatTexts: [],
+      battleSunny: false,
+      waitingInput: false,
+      activeCmdKey: null,
+      trappedKeys: new Set(),
+      summonActive: false,
+      summonProg: 0,
+      fireworks: [],
+
+      wait(ms, fn) {
+        const id = setTimeout(() => {
+          this.timers = this.timers.filter(t => t !== id);
+          fn();
+        }, ms);
+        this.timers.push(id);
+        return id;
+      },
+
+      clearTimers() {
+        this.timers.forEach(id => clearTimeout(id));
+        this.timers = [];
+        this.intervals.forEach(id => clearInterval(id));
+        this.intervals = [];
+        if (this.summonRaf !== null) {
+          cancelAnimationFrame(this.summonRaf);
+          this.summonRaf = null;
+        }
+        this.summonActive = false;
+        this.walkKeys = { up: false, down: false, left: false, right: false };
+        this.tapTarget = null;
+      },
+
+      flash(color = "#ffffff", dur = 150) {
+        const el = document.getElementById("flash-layer");
+        el.style.backgroundColor = color;
+        el.style.opacity = "0.86";
+        setTimeout(() => { el.style.opacity = "0"; }, dur);
+      },
+
+      shakeShell() {
+        const el = document.getElementById("app-shell");
+        el.classList.remove("shake-now");
+        void el.offsetWidth;
+        el.classList.add("shake-now");
+      },
+
+      switchScene(name) {
+        this.scene = name;
+        ["title", "explore", "battle", "victory"].forEach(s => {
+          const el = document.getElementById(`scene-${s}`);
+          if (s === name) el.classList.remove("hidden");
+          else el.classList.add("hidden");
+        });
+      },
+
+      updateModeUI() {
+        const topBtn = document.getElementById("btn-mode-toggle");
+        const vicBtn = document.getElementById("btn-vic-switch");
+        const dpad = document.getElementById("explore-controls");
+        if (this.autoMode) {
+          topBtn.textContent = "▶ 自動演出";
+          topBtn.className = "top-btn top-btn-auto";
+          vicBtn.textContent = "🎮 切換手動挑戰";
+          dpad.classList.add("hidden");
+        } else {
+          topBtn.textContent = "🎮 手動遊玩";
+          topBtn.className = "top-btn top-btn-manual";
+          vicBtn.textContent = "▶ 切換自動演出";
+          if (this.scene === "explore" && !this.exploreBusy) dpad.classList.remove("hidden");
+        }
+      },
+
+      toggleMode() {
+        SFX.init();
+        SFX.sfxCursor();
+        this.autoMode = !this.autoMode;
+        this.updateModeUI();
+        if (this.autoMode) {
+          if (this.scene === "explore" && !this.exploreBusy) this.autoWalkExplore();
+          else if (this.scene === "battle" && this.waitingInput) this.runAutoBattleTurn();
+        }
+      },
+
+      startGame(isAuto) {
+        SFX.init();
+        SFX.sfxConfirm();
+        this.clearTimers();
+        this.autoMode = isAuto;
+        this.updateModeUI();
+        this.startExplore();
+      },
+
+      restartToTitle() {
+        this.clearTimers();
+        SFX.stopBGM();
+        this.switchScene("title");
+      },
+
+      buildCastModal() {
+        const grid = document.getElementById("cast-grid");
+        grid.innerHTML = "";
+        HERO_INFO.forEach(h => {
+          const card = document.createElement("div");
+          card.className = "cast-card";
+          card.innerHTML = `
+            <div class="cast-canvases">
+              <canvas data-p="${h.id}" width="48" height="48" style="width:50px; height:50px; border:1.5px solid #fde047; border-radius:4px; background:#0f172a;"></canvas>
+              <canvas data-s="${h.id}" width="36" height="48" style="width:45px; height:60px;"></canvas>
+            </div>
+            <div style="font-size:12px; font-weight:900; color:#fde047;">${h.name}</div>
+            <div style="font-size:10px; font-weight:800; color:#67e8f9;">${h.title}</div>
+            <div style="font-size:9.5px; color:#e2e8f0; margin-top:2px; line-height:1.3;">${h.desc}</div>
+          `;
+          grid.appendChild(card);
+          Art.drawPortraitTo(card.querySelector(`[data-p="${h.id}"]`), h.id);
+          const sc = card.querySelector(`[data-s="${h.id}"]`);
+          const sctx = sc.getContext("2d");
+          sctx.imageSmoothingEnabled = false;
+          sctx.drawImage(SpriteBank.sprites[h.id].idle0, 0, 0, 36, 48);
+        });
+      },
+
+      /* ------------------ ACT 1: CAMPUS OVERWORLD MAP ------------------ */
+      startExplore() {
+        this.switchScene("explore");
+        SFX.playBGM("explore");
+        Art.drawPortraitTo(document.getElementById("canvas-portrait"), "runner");
+
+        this.player = { x: 180, y: 675, walking: false };
+        this.camY = 340;
+        this.tapTarget = null;
+        this.exploreStep = 0;
+        this.exploreBusy = false;
+        this.exclaimTimer = 0;
+        this.encounterShutter = 0;
+        this.npcs.forEach(n => { n.met = false; });
+
+        [0, 1, 2].forEach(i => {
+          document.getElementById(`gear-${i}`).className = "gear-pill";
+        });
+
+        const nar = document.getElementById("explore-narration");
+        nar.className = "ff-narration";
+        nar.textContent = "大庄國小操場・清晨 07:50 —— 快去找夥伴會合！";
+        document.getElementById("explore-speaker").textContent = "大庄健將";
+        document.getElementById("explore-dialogue").textContent =
+          "「2026 年 12 月 12 日上午 8:00，大庄國小 71 週年校慶運動會即將揭幕！快在操場與夥伴會合，做好賽前準備吧！」";
+
+        this.updateModeUI();
+        if (this.autoMode) this.wait(1100, () => { if (this.autoMode) this.autoWalkExplore(); });
+      },
+
+      autoWalkExplore() {
+        if (this.scene !== "explore" || this.exploreBusy) return;
+        const npc = this.npcs[this.exploreStep];
+        if (!npc) return;
+        this.tapTarget = { x: npc.x, y: npc.y + 30 };
+      },
+
+      meetNpc(idx) {
+        if (this.exploreBusy) return;
+        const npc = this.npcs[idx];
+        if (!npc || npc.met) return;
+
+        this.exploreBusy = true;
+        this.player.walking = false;
+        this.tapTarget = null;
+        npc.met = true;
+        this.exclaimTimer = 60;
+        SFX.sfxExclaim();
+
+        document.getElementById(`gear-${npc.gearIdx}`).className = "gear-pill got";
+        Art.drawPortraitTo(document.getElementById("canvas-portrait"), npc.id);
+        document.getElementById("explore-speaker").textContent = npc.name;
+        document.getElementById("explore-dialogue").textContent = npc.dialogue;
+
+        const nar = document.getElementById("explore-narration");
+        nar.className = "ff-narration";
+        nar.textContent = `★ ${npc.notice}`;
+
+        if (idx < 2) {
+          this.exploreStep = idx + 1;
+          this.wait(this.autoMode ? 2300 : 1200, () => {
+            this.exploreBusy = false;
+            this.updateModeUI();
+            if (this.autoMode) this.autoWalkExplore();
+          });
+        } else {
+          // Trigger Act 2 Boss Encounter Shutter Transition!
+          this.wait(2100, () => {
+            nar.className = "ff-warning";
+            nar.textContent = "⚠️ 警報！操場中央出現強烈熱浪與時間異常！";
+            SFX.sfxEncounter();
+            this.flash("#ffffff", 150);
+            this.encounterShutter = 0.05;
+            const sh = setInterval(() => {
+              if (this.scene !== "explore") {
+                clearInterval(sh);
+                return;
+              }
+              this.encounterShutter += 0.1;
+              if (this.encounterShutter >= 1.15) {
+                clearInterval(sh);
+                this.flash("#ffffff", 220);
+                this.startBattle();
+              }
+            }, 42);
+            this.intervals.push(sh);
+          });
+        }
+      },
+
+      /* ------------------ ACT 2 & 3: BOSS INTRO & 6-ROUND BATTLE ------------------ */
+      startBattle() {
+        this.switchScene("battle");
+        SFX.playBGM("battle");
+
+        this.roundIdx = 0;
+        this.bossHp = this.bossMaxHp;
+        this.cleanScore = 100;
+        this.battleSunny = false;
+        this.summonActive = false;
+        this.summonProg = 0;
+        this.particles = [];
+        this.floatTexts = [];
+        this.party = HERO_INFO.map(h => ({ ...h, tag: "", shield: false }));
+        this.heroAnim = this.party.map((_, i) => ({ phase: i * 1.1, dx: 0, dy: 0, hitFlash: false, activeArrow: false }));
+        this.bossAnim = { roundNum: 1, shake: 0, hitFlash: 0, lungeX: 0, defeated: false, fade: 1 };
+
+        this.resetMainMenu(false);
+        this.updateBossHUD();
+        this.renderPartyCards(-1, false);
+
+        // Act 2: Boss Intro Sequence
+        this.showBanner("⚠️ 警報！", "操場中央出現強烈熱浪與時間異常！", true);
+        this.setSubMsg("【日晷混沌・操場巨神】", "「哈哈哈！想順利辦完 71 週年運動會？先撐過我的 6 個計時回合，別受傷、別中暑、也別把操場弄髒再說吧！」");
+
+        this.wait(2500, () => {
+          this.showBanner("大庄健將", "「大家別怕！遵守運動會規則、團結合作，一定能打倒它！」", false);
+          this.setSubMsg("大庄健將", "「大家別怕！只要遵守運動會規則、團結合作，我們一定能撐過 6 回合打倒它！」");
+          this.wait(2000, () => {
+            this.hideBanner();
+            this.beginRound(0);
+          });
+        });
+      },
+
+      updateBossHUD() {
+        const pct = Math.max(0, (this.bossHp / this.bossMaxHp) * 100);
+        document.getElementById("boss-hp-fill").style.width = `${pct}%`;
+        document.getElementById("boss-hp-label").textContent = `HP ${Math.max(0, Math.floor(this.bossHp))} / ${this.bossMaxHp}`;
+        document.getElementById("hud-round-badge").textContent = `0${Math.min(6, this.roundIdx + 1)}/06`;
+        const cleanEl = document.getElementById("hud-clean-badge");
+        cleanEl.textContent = `整潔 ${this.cleanScore}%`;
+        cleanEl.style.background = this.cleanScore < 100 ? "#92400e" : "#065f46";
+        cleanEl.style.borderColor = this.cleanScore < 100 ? "#fbbf24" : "#34d399";
+      },
+
+      renderPartyCards(actingIdx = -1, isLimit = false) {
+        const panel = document.getElementById("party-panel");
+        panel.innerHTML = "";
+        this.party.forEach((h, i) => {
+          const pct = Math.max(0, Math.min(100, (h.hp / h.maxHp) * 100));
+          const acting = i === actingIdx;
+          const card = document.createElement("div");
+          card.className = `hero-card ${acting ? "acting" : ""} ${isLimit ? "limit-ready" : ""}`;
+          const tagHtml = h.shield
+            ? '<span style="font-size:8px; padding:1px 3px; border-radius:3px; background:rgba(62,230,255,0.3); color:#a5f3fc; font-weight:900;">盾</span>'
+            : h.tag
+            ? `<span style="font-size:8px; padding:1px 3px; border-radius:3px; background:rgba(46,230,122,0.3); color:#bbf7d0; font-weight:900;">${h.tag}</span>`
+            : "";
+          card.innerHTML = `
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:2px;">
+              <span style="font-size:9.5px; font-weight:900; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${h.name}</span>
+              ${tagHtml}
+            </div>
+            <div class="font-mono-px" style="font-size:8.5px; text-align:right; color:#e2e8f0; margin-top:1px;">${Math.floor(h.hp)}/${h.maxHp}</div>
+            <div class="bar-mini"><div class="bar-mini-fill" style="width:${pct}%; background:${pct < 35 ? "#ef4444" : "#34d399"};"></div></div>
+            <div class="bar-mini" style="height:3.5px;"><div class="bar-mini-fill" style="width:${acting || isLimit ? 100 : h.atb}%; background:${isLimit ? "#fb923c" : "#fcd34d"};"></div></div>
+            <div class="font-mono-px ${acting || isLimit ? "ready-blink" : ""}" style="font-size:7.5px; text-align:right; margin-top:1px; color:${isLimit ? "#fdba74" : acting ? "#fde047" : "#94a3b8"};">
+              ${isLimit ? "MAX!" : acting ? "READY" : "ATB"}
+            </div>
+          `;
+          panel.appendChild(card);
+        });
+      },
+
+      showBanner(sub, main, isWarning = false) {
+        const el = document.getElementById("battle-banner");
+        el.className = isWarning ? "ff-warning" : "ff-banner";
+        document.getElementById("battle-banner-sub").textContent = sub;
+        document.getElementById("battle-banner-main").textContent = main;
+        el.classList.remove("hidden");
+      },
+
+      hideBanner() { document.getElementById("battle-banner").classList.add("hidden"); },
+
+      setSubMsg(title, msg) {
+        document.getElementById("submenu-header").textContent = title;
+        document.getElementById("submenu-body").innerHTML =
+          `<p style="margin:0; font-size:11.5px; font-weight:700; color:#dbeafe; line-height:1.42;">${msg}</p>`;
+      },
+
+      resetMainMenu(isFinal) {
+        const defRow = document.getElementById("main-cmd-defend");
+        const defLabel = document.getElementById("main-cmd-defend-label");
+        if (isFinal) {
+          defLabel.textContent = "★召喚";
+          defRow.classList.add("summon-glow");
+        } else {
+          defLabel.textContent = "防禦";
+          defRow.classList.remove("summon-glow");
+        }
+        document.querySelectorAll("#scene-battle [data-cmd]").forEach(el => {
+          el.classList.remove("selected");
+          el.querySelector(".glove").classList.add("invisible");
+        });
+      },
+
+      highlightMainCmd(cmdKey) {
+        document.querySelectorAll("#scene-battle [data-cmd]").forEach(el => {
+          const match = el.dataset.cmd === cmdKey;
+          el.classList.toggle("selected", match);
+          el.querySelector(".glove").classList.toggle("invisible", !match);
+        });
+      },
+
+      cmdLabel(k, isFinal) {
+        if (k === "attack") return "攻擊";
+        if (k === "skill") return "特技";
+        if (k === "item") return "道具";
+        return isFinal ? "★召喚" : "防禦";
+      },
+
+      getHeroPos(i) {
+        return { x: 238 + (i % 2) * 52, y: 148 + i * 33 };
+      },
+
+      beginRound(idx) {
+        this.roundIdx = idx;
+        const r = ROUNDS[idx];
+        this.bossAnim.roundNum = r.num;
+        this.trappedKeys.clear();
+        this.activeCmdKey = null;
+        this.updateBossHUD();
+        document.getElementById("battle-time-tag").textContent = r.timeTag;
+        this.resetMainMenu(!!r.isFinal);
+
+        if (r.bossPreAttack) {
+          this.showBanner("BOSS 行動・日晷混沌", r.bossSkill, false);
+          this.setSubMsg("魔王攻擊", r.bossLine);
+          this.renderPartyCards(-1, false);
+
+          this.wait(850, () => {
+            SFX.sfxBossHit();
+            this.bossAnim.lungeX = 20;
+            this.flash(r.bossVfx === "fireball" ? "#ff5722" : "#ff2a4b", 130);
+            this.shakeShell();
+
+            this.party.forEach((h, i) => {
+              let d = r.bossDmg;
+              if (h.shield) d = Math.round(d * 0.55);
+              if (r.isFinal) d = Math.min(h.hp - 250, d);
+              h.hp = Math.max(200, h.hp - d);
+              this.heroAnim[i].hitFlash = true;
+              const pos = this.getHeroPos(i);
+              this.spawnFloat(pos.x, pos.y - 20, `-${d}`, "#ff5252");
+              this.spawnBurst(pos.x, pos.y, r.bossVfx === "fireball" ? "#ff5722" : "#ff3b4e", 10);
+            });
+            this.renderPartyCards(-1, false);
+            this.wait(380, () => {
+              this.bossAnim.lungeX = 0;
+              this.heroAnim.forEach(a => { a.hitFlash = false; });
+            });
+            this.wait(1200, () => {
+              this.hideBanner();
+              this.openHeroTurn(r);
+            });
+          });
+        } else {
+          this.showBanner("BOSS 蓄力・日晷混沌", r.bossSkill, false);
+          this.setSubMsg("緊急警戒", r.bossLine);
+          this.wait(1200, () => {
+            this.hideBanner();
+            this.openHeroTurn(r);
+          });
+        }
+      },
+
+      openHeroTurn(r) {
+        this.waitingInput = true;
+        this.heroAnim.forEach((a, i) => {
+          a.dx = i === r.actorIdx ? -15 : 0;
+          a.activeArrow = i === r.actorIdx;
+        });
+        this.renderPartyCards(r.actorIdx, !!r.isFinal);
+        this.setSubMsg(
+          `${r.isFinal ? "全員合體" : this.party[r.actorIdx].name} READY!`,
+          r.isFinal
+            ? "元氣條集滿！請點選右側發光的「★召喚」發動終極必殺！"
+            : `請從右側 4 選單選擇指令！`
+        );
+
+        if (this.autoMode) this.runAutoBattleTurn();
+      },
+
+      onMainCommandClick(cmdKey) {
+        if (!this.waitingInput) return;
+        const r = ROUNDS[this.roundIdx];
+        SFX.init();
+        SFX.sfxCursor();
+        this.highlightMainCmd(cmdKey);
+        this.activeCmdKey = cmdKey;
+
+        const opts = r.cmdMenus[cmdKey];
+        if (opts && opts.length > 0) {
+          this.renderSubMenu(r, cmdKey, opts);
+        } else {
+          this.setSubMsg(
+            `${this.cmdLabel(cmdKey, r.isFinal)} — ${this.party[r.actorIdx].name}`,
+            `本回合請使用「${this.cmdLabel(r.correctCmd, r.isFinal)}」來應對魔王喔！`
+          );
+        }
+      },
+
+      renderSubMenu(r, cmdKey, opts) {
+        const actorName = r.isFinal ? "全員合體" : this.party[r.actorIdx].name;
+        document.getElementById("submenu-header").textContent = `${this.cmdLabel(cmdKey, r.isFinal)} — ${actorName}`;
+        const body = document.getElementById("submenu-body");
+        body.innerHTML = "";
+
+        opts.forEach((opt, i) => {
+          const tKey = `${cmdKey}-${i}`;
+          const row = document.createElement("div");
+          row.dataset.subIdx = i;
+          row.className = `cmd-row ${this.trappedKeys.has(tKey) ? "trapped" : ""} ${opt.isSummon ? "summon-glow" : ""}`;
+          row.style.fontSize = "11.5px";
+          row.style.padding = "5px 6px";
+          row.innerHTML = `<span class="glove invisible">👉</span><span style="flex:1;">${opt.label}</span>`;
+          row.onclick = () => {
+            if (!this.waitingInput) return;
+            SFX.init();
+            this.executeSubOption(r, cmdKey, opt, i, row);
+          };
+          body.appendChild(row);
+        });
+      },
+
+      runAutoBattleTurn() {
+        const r = ROUNDS[this.roundIdx];
+
+        // Round 1 Auto-Play Demo: First show 1 trap choice with red strikethrough & warning banner!
+        if (r.autoDemoTrapCmd && !this.trappedKeys.has(`${r.autoDemoTrapCmd}-0`)) {
+          this.wait(550, () => {
+            if (!this.autoMode || !this.waitingInput) return;
+            this.onMainCommandClick(r.autoDemoTrapCmd);
+            this.wait(600, () => {
+              if (!this.autoMode || !this.waitingInput) return;
+              const trapRow = document.querySelector('#submenu-body [data-sub-idx="0"]');
+              if (trapRow) {
+                trapRow.classList.add("selected");
+                trapRow.querySelector(".glove").classList.remove("invisible");
+              }
+              this.executeSubOption(r, r.autoDemoTrapCmd, r.cmdMenus[r.autoDemoTrapCmd][0], 0, trapRow);
+              this.wait(1750, () => {
+                if (!this.autoMode || !this.waitingInput) return;
+                this.autoExecuteCorrect(r);
+              });
+            });
+          });
+        } else {
+          this.wait(550, () => {
+            if (!this.autoMode || !this.waitingInput) return;
+            this.autoExecuteCorrect(r);
+          });
+        }
+      },
+
+      autoExecuteCorrect(r) {
+        this.onMainCommandClick(r.correctCmd);
+        const opts = r.cmdMenus[r.correctCmd];
+        const cIdx = opts.findIndex(o => o.correct);
+        this.wait(620, () => {
+          if (!this.autoMode || !this.waitingInput) return;
+          const row = document.querySelector(`#submenu-body [data-sub-idx="${cIdx}"]`);
+          if (row) {
+            SFX.sfxCursor();
+            row.classList.add("selected");
+            row.querySelector(".glove").classList.remove("invisible");
+          }
+          this.wait(600, () => {
+            if (!this.autoMode || !this.waitingInput) return;
+            this.executeSubOption(r, r.correctCmd, opts[cIdx], cIdx, row);
+          });
+        });
+      },
+
+      executeSubOption(r, cmdKey, opt, idx, rowEl) {
+        if (!opt.correct) {
+          SFX.sfxError();
+          this.trappedKeys.add(`${cmdKey}-${idx}`);
+          if (rowEl) rowEl.classList.add("trapped");
+          this.flash("#ff334b", 120);
+          this.shakeShell();
+          this.showBanner("✖ 安全規則警告", opt.warning, true);
+
+          if (r.num === 5) {
+            this.cleanScore = Math.max(60, this.cleanScore - 20);
+            this.updateBossHUD();
+          }
+
+          const h = this.party[r.actorIdx];
+          const dmg = opt.trapDmg || 160;
+          h.hp = Math.max(200, h.hp - dmg);
+          this.heroAnim[r.actorIdx].hitFlash = true;
+          const pos = this.getHeroPos(r.actorIdx);
+          this.spawnFloat(pos.x, pos.y - 22, `-${dmg}`, "#ff5252");
+          this.renderPartyCards(r.actorIdx, !!r.isFinal);
+          this.wait(350, () => { this.heroAnim[r.actorIdx].hitFlash = false; });
+          return;
+        }
+
+        // Correct move!
+        this.waitingInput = false;
+        SFX.sfxConfirm();
+        this.showBanner(opt.bannerSub, opt.bannerMain, false);
+        this.setSubMsg(opt.bannerSub, opt.log);
+
+        if (opt.vfx === "summon") {
+          this.playFinalSummon();
+          return;
+        }
+
+        const actor = this.heroAnim[r.actorIdx];
+        actor.dx = -44;
+
+        this.wait(360, () => {
+          if (opt.vfx === "shield") {
+            SFX.sfxShield();
+            this.party.forEach((h, i) => {
+              h.shield = true;
+              if (opt.tagGrant) h.tag = opt.tagGrant;
+              const p = this.getHeroPos(i);
+              this.spawnBurst(p.x, p.y, "#3ee6ff", 14);
+            });
+          } else if (opt.vfx === "heal") {
+            SFX.sfxHeal();
+            this.party.forEach((h, i) => {
+              h.hp = Math.min(h.maxHp, h.hp + opt.heal);
+              if (opt.tagGrant) h.tag = opt.tagGrant;
+              const p = this.getHeroPos(i);
+              this.spawnFloat(p.x, p.y - 22, `+${opt.heal}`, "#2ee67a");
+              this.spawnBurst(p.x, p.y, "#38bdf8", 14);
+            });
+            this.spawnBurst(102, 165, "#38bdf8", 22);
+          } else if (opt.vfx === "slash") {
+            SFX.sfxSlash();
+            actor.dx = -115;
+            this.spawnBurst(102, 165, "#ffd43b", 30);
+          } else if (opt.vfx === "clean") {
+            SFX.sfxSlash();
+            this.cleanScore = 100;
+            this.party.forEach(h => { if (opt.tagGrant) h.tag = opt.tagGrant; });
+            this.spawnBurst(102, 165, "#2ee67a", 28);
+          }
+
+          this.bossHp = Math.max(1200, this.bossHp - opt.dmg);
+          this.bossAnim.hitFlash = 16;
+          this.bossAnim.shake = 14;
+          this.spawnFloat(102, 130, `-${opt.dmg}`, "#ffd43b");
+          this.flash("#ffffff", 100);
+          this.updateBossHUD();
+          this.renderPartyCards(-1, false);
+
+          this.wait(650, () => {
+            this.heroAnim.forEach(a => { a.dx = 0; a.activeArrow = false; });
+
+            if (opt.bossMissAfter) {
+              this.wait(360, () => {
+                this.bossAnim.lungeX = 18;
+                SFX.sfxMiss();
+                this.party.forEach((_, i) => {
+                  const p = this.getHeroPos(i);
+                  this.spawnFloat(p.x, p.y - 22, "MISS!", "#3ee6ff");
+                });
+                this.showBanner("暖身護盾發威！", "魔王攻擊完全 MISS！全員安全無傷！", false);
+                this.wait(400, () => { this.bossAnim.lungeX = 0; });
+                this.wait(1550, () => {
+                  this.hideBanner();
+                  this.beginRound(this.roundIdx + 1);
+                });
+              });
+            } else {
+              this.wait(1550, () => {
+                this.hideBanner();
+                this.beginRound(this.roundIdx + 1);
+              });
+            }
+          });
+        });
+      },
+
+      playFinalSummon() {
+        this.showBanner("★召喚・全員集氣", "召喚【大庄 71 週年・聖火守護神】！", false);
+        SFX.sfxSummon();
+        this.party.forEach((_, i) => {
+          const p = this.getHeroPos(i);
+          this.spawnBurst(p.x, p.y, "#ffd43b", 18);
+        });
+
+        this.wait(850, () => {
+          this.summonActive = true;
+          this.summonProg = 0;
+          const t0 = performance.now();
+          const dur = 3300;
+          let fired = false;
+
+          const step = (now) => {
+            if (this.scene !== "battle") {
+              this.summonActive = false;
+              this.summonRaf = null;
+              return;
+            }
+            this.summonProg = Math.min(1, (now - t0) / dur);
+            if (this.summonProg > 0.52 && !fired) {
+              fired = true;
+              SFX.sfxLaser();
+              this.showBanner("聖火守護神・終極必殺", "五力光波一擊貫穿日晷巨神！！", false);
+            }
+            if (this.summonProg < 1) {
+              this.summonRaf = requestAnimationFrame(step);
+            } else {
+              this.summonRaf = null;
+              this.summonActive = false;
+              SFX.sfxExplosion();
+              this.flash("#fff6b8", 300);
+              this.shakeShell();
+              this.bossHp = 0;
+              this.bossAnim.hitFlash = 35;
+              this.bossAnim.shake = 22;
+              this.bossAnim.defeated = true;
+              this.updateBossHUD();
+              this.spawnBurst(102, 165, "#ffd43b", 48);
+              this.spawnBurst(102, 165, "#8b5cf6", 36);
+              this.spawnFloat(102, 130, "9999!!", "#fff6b8", true);
+              this.heroAnim.forEach(a => { a.dx = 0; a.activeArrow = false; });
+              this.showBanner("BOSS 擊破！", "「可惡……大家的暖身、補水、守秩序跟環保力量太強大了……祝你們校慶順利……！」", false);
+
+              const fTimer = setInterval(() => {
+                if (this.scene !== "battle") {
+                  clearInterval(fTimer);
+                  return;
+                }
+                this.bossAnim.fade = Math.max(0, this.bossAnim.fade - 0.08);
+                if (this.bossAnim.fade <= 0) {
+                  clearInterval(fTimer);
+                  this.battleSunny = true;
+                  this.flash("#ffffff", 180);
+                }
+              }, 55);
+              this.intervals.push(fTimer);
+
+              this.wait(2600, () => this.startVictory());
+            }
+          };
+          this.summonRaf = requestAnimationFrame(step);
+        });
+      },
+
+      /* ------------------ ACT 4: VICTORY & INVITATION POSTER ------------------ */
+      startVictory() {
+        this.switchScene("victory");
+        SFX.stopBGM();
+        SFX.sfxFanfare();
+        this.wait(1200, () => {
+          if (this.scene === "victory") SFX.playBGM("victory");
+        });
+        this.fireworks = [];
+        this.updateModeUI();
+
+        document.getElementById("victory-phase-a").classList.remove("hidden");
+        document.getElementById("victory-phase-b").classList.add("hidden");
+
+        this.wait(3400, () => {
+          if (this.scene !== "victory") return;
+          document.getElementById("victory-phase-a").classList.add("hidden");
+          document.getElementById("victory-phase-b").classList.remove("hidden");
+        });
+      },
+
+      spawnBurst(x, y, color, count = 16) {
+        for (let i = 0; i < count; i++) {
+          const a = Math.random() * Math.PI * 2;
+          const s = 1.2 + Math.random() * 4;
+          this.particles.push({
+            x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 1,
+            size: 2.5 + Math.random() * 3.5, color, life: 22 + Math.random() * 20
+          });
+        }
+      },
+
+      spawnFloat(x, y, text, color = "#fff", big = false) {
+        this.floatTexts.push({ x, y, text, color, big, life: 52 });
+      },
+
+      /* ==========================================================================
+       * 6. 60FPS ANIMATION & RENDER LOOP
+       * ========================================================================== */
+      loop() {
+        this.tick++;
+        if (this.scene === "title") this.drawTitle();
+        else if (this.scene === "explore") this.updateAndDrawExplore();
+        else if (this.scene === "battle") this.drawBattle();
+        else if (this.scene === "victory") this.drawVictory();
+        requestAnimationFrame(() => this.loop());
+      },
+
+      drawTitle() {
+        const c = document.getElementById("canvas-title");
+        const ctx = c.getContext("2d");
+        const w = c.width, h = c.height;
+        ctx.imageSmoothingEnabled = false;
+
+        Art.drawArenaBG(ctx, w, h, this.tick, false);
+        if (this.tick % 170 < 3) {
+          ctx.fillStyle = "rgba(255,255,255,0.2)";
+          ctx.fillRect(0, 0, w, h * 0.5);
+        }
+
+        // Boss looming in upper center
+        Art.drawBoss(ctx, w / 2, h * 0.40, this.tick, { roundNum: 6, scale: 0.94 });
+
+        // All 4 Heroes side-by-side on the violet-purple track
+        const roles = ["runner", "teacher", "parent", "eco"];
+        const names = ["大庄健將", "體育老師", "神隊友家長", "環保小尖兵"];
+        roles.forEach((role, i) => {
+          const hx = 52 + i * 85;
+          const hy = h * 0.625;
+          Art.drawHero(ctx, role, hx, hy, this.tick, { scale: 1.46, phase: i * 1.1, reflect: true });
+          ctx.fillStyle = "rgba(7, 12, 32, 0.85)";
+          ctx.fillRect(hx - 35, hy + 36, 70, 15);
+          ctx.strokeStyle = "rgba(255, 212, 59, 0.75)";
+          ctx.lineWidth = 1;
+          ctx.strokeRect(hx - 35, hy + 36, 70, 15);
+          ctx.fillStyle = "#fff6b8";
+          ctx.font = "bold 10px sans-serif";
+          ctx.textAlign = "center";
+          ctx.fillText(names[i], hx, hy + 47);
+        });
+
+        // Vignette behind menu
+        const vg = ctx.createLinearGradient(0, h * 0.72, 0, h);
+        vg.addColorStop(0, "rgba(7, 9, 20, 0)");
+        vg.addColorStop(0.45, "rgba(7, 9, 20, 0.85)");
+        vg.addColorStop(1, "rgba(7, 9, 20, 0.98)");
+        ctx.fillStyle = vg;
+        ctx.fillRect(0, h * 0.72, w, h * 0.28);
+      },
+
+      updateAndDrawExplore() {
+        const c = document.getElementById("canvas-explore");
+        const ctx = c.getContext("2d");
+        const w = c.width, h = c.height;
+        ctx.imageSmoothingEnabled = false;
+
+        if (!this.exploreBusy) {
+          let vx = 0, vy = 0;
+          const spd = 2.45;
+          if (this.walkKeys.up) vy -= spd;
+          if (this.walkKeys.down) vy += spd;
+          if (this.walkKeys.left) vx -= spd;
+          if (this.walkKeys.right) vx += spd;
+
+          if (vx === 0 && vy === 0 && this.tapTarget) {
+            const dx = this.tapTarget.x - this.player.x;
+            const dy = this.tapTarget.y - this.player.y;
+            const dist = Math.hypot(dx, dy);
+            if (dist > 4) { vx = (dx / dist) * spd; vy = (dy / dist) * spd; }
+            else this.tapTarget = null;
+          }
+
+          if (vx !== 0 || vy !== 0) {
+            this.player.x = Math.max(54, Math.min(w - 54, this.player.x + vx));
+            this.player.y = Math.max(120, Math.min(this.mapH - 40, this.player.y + vy));
+            this.player.walking = true;
+            if (this.tick % 14 === 0) SFX.sfxStep();
+          } else {
+            this.player.walking = false;
+          }
+
+          const npc = this.npcs[this.exploreStep];
+          if (npc && !npc.met && Math.hypot(this.player.x - npc.x, this.player.y - npc.y) < 42) {
+            this.meetNpc(this.exploreStep);
+          }
+        }
+
+        const desiredCam = Math.max(0, Math.min(this.mapH - h, this.player.y - h * 0.58));
+        this.camY += (desiredCam - this.camY) * 0.1;
+
+        ctx.save();
+        ctx.translate(0, -Math.round(this.camY));
+
+        // 1. Lush Green Infield Grass
+        ctx.fillStyle = "#2d7a47";
+        ctx.fillRect(0, 0, w, this.mapH);
+        ctx.fillStyle = "#25693c";
+        for (let gy = 0; gy < this.mapH; gy += 32) {
+          for (let gx = (gy % 64 === 0 ? 0 : 16); gx < w; gx += 32) {
+            ctx.fillRect(gx, gy, 16, 16);
+          }
+        }
+
+        // 2. Violet-Purple Running Track with Crisp White Lane Lines
+        ctx.fillStyle = "#6d28d9";
+        ctx.fillRect(78, 0, 204, this.mapH);
+        ctx.fillStyle = "#8b5cf6";
+        ctx.fillRect(92, 0, 176, this.mapH);
+        ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+        [90, 135, 180, 225, 270].forEach(lx => ctx.fillRect(lx, 0, 3, this.mapH));
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(90, 610, 182, 6);
+
+        // 3. School Gate Arch
+        ctx.fillStyle = "#cbd5e1";
+        ctx.fillRect(62, 680, 24, 50); ctx.fillRect(274, 680, 24, 50);
+        ctx.fillStyle = "#1e3a8a";
+        ctx.fillRect(62, 672, 236, 16);
+        ctx.fillStyle = "#ffd43b";
+        ctx.font = "bold 10px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("大庄國小 71 週年校慶操場入口", 180, 684);
+
+        // 4. Trees, Bleachers & Supply Tent
+        const drawTree = (tx, ty) => {
+          ctx.fillStyle = "rgba(0,0,0,0.32)";
+          ctx.beginPath(); ctx.ellipse(tx, ty + 16, 20, 8, 0, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = "#78350f"; ctx.fillRect(tx - 5, ty, 10, 16);
+          ctx.fillStyle = "#14532d"; ctx.beginPath(); ctx.arc(tx, ty - 6, 20, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = "#16a34a"; ctx.beginPath(); ctx.arc(tx - 4, ty - 10, 14, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = "#4ade80"; ctx.beginPath(); ctx.arc(tx - 7, ty - 14, 6, 0, Math.PI * 2); ctx.fill();
+        };
+        [140, 290, 440, 580].forEach(y => { drawTree(32, y); drawTree(328, y + 30); });
+
+        // Bleachers & Supply Tent
+        ctx.fillStyle = "#64748b"; ctx.fillRect(8, 335, 58, 66);
+        ctx.fillStyle = "#94a3b8"; [345, 362, 379].forEach(by => ctx.fillRect(12, by, 50, 7));
+        ctx.fillStyle = "#2563eb"; ctx.fillRect(290, 382, 62, 46);
+        ctx.fillStyle = "#ffffff"; ctx.fillRect(294, 386, 54, 8);
+
+        // 5. NPCs with Bouncing Red '!' & '🔍'
+        this.npcs.forEach((npc, i) => {
+          Art.drawHero(ctx, npc.id, npc.x, npc.y, this.tick, { scale: 1.15, phase: i * 1.4 });
+          if (!npc.met && i === this.exploreStep) {
+            const by = npc.y - 44 + Math.sin(this.tick * 0.22) * 3.5;
+            ctx.fillStyle = "#ef4444";
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.arc(npc.x - 10, by, 9, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "bold 12px monospace";
+            ctx.textAlign = "center";
+            ctx.fillText("!", npc.x - 10, by + 4);
+            ctx.font = "13px sans-serif";
+            ctx.fillText("🔍", npc.x + 11, by + 5);
+          }
+        });
+
+        // 6. Player (大庄健將)
+        Art.drawHero(ctx, "runner", this.player.x, this.player.y, this.tick, {
+          scale: 1.18, walking: this.player.walking
+        });
+
+        if (this.exclaimTimer > 0) {
+          this.exclaimTimer--;
+          ctx.font = "18px sans-serif";
+          ctx.textAlign = "center";
+          ctx.fillText("✨", this.player.x, this.player.y - 38);
+        }
+
+        ctx.restore();
+
+        // Subtle Morning Sunlight Rays
+        const beam = ctx.createLinearGradient(0, 0, w, h);
+        beam.addColorStop(0, "rgba(255, 240, 170, 0.22)");
+        beam.addColorStop(0.5, "rgba(255, 220, 120, 0.05)");
+        beam.addColorStop(1, "rgba(255, 200, 100, 0)");
+        ctx.fillStyle = beam;
+        ctx.fillRect(0, 0, w, h);
+
+        // Classic RPG Horizontal Shutter Encounter Transition
+        if (this.encounterShutter > 0) {
+          const bars = 10;
+          const bh = h / bars;
+          ctx.fillStyle = "#050712";
+          for (let b = 0; b < bars; b++) {
+            const bw = w * Math.min(1, this.encounterShutter);
+            ctx.fillRect(b % 2 === 0 ? 0 : w - bw, b * bh, bw, bh + 1);
+          }
+        }
+      },
+
+      drawBattle() {
+        const c = document.getElementById("canvas-battle");
+        const ctx = c.getContext("2d");
+        const w = c.width, h = c.height;
+        ctx.imageSmoothingEnabled = false;
+
+        if (this.summonActive) {
+          Art.drawSummonCutIn(ctx, w, h, this.summonProg, this.tick);
+          return;
+        }
+
+        Art.drawArenaBG(ctx, w, h, this.tick, this.battleSunny);
+
+        if (this.bossAnim.hitFlash > 0) this.bossAnim.hitFlash--;
+        if (this.bossAnim.shake > 0) this.bossAnim.shake *= 0.86;
+
+        // Left: Boss
+        Art.drawBoss(ctx, 102, 165, this.tick, { ...this.bossAnim, scale: 0.92 });
+
+        // Right: 4 Protagonists
+        const isLimit = ROUNDS[this.roundIdx] && ROUNDS[this.roundIdx].isFinal && this.bossHp > 0;
+        this.party.forEach((hObj, i) => {
+          const pos = this.getHeroPos(i);
+          Art.drawHero(ctx, hObj.id, pos.x, pos.y, this.tick, {
+            scale: 1.24,
+            dx: this.heroAnim[i].dx,
+            dy: this.heroAnim[i].dy,
+            hitFlash: this.heroAnim[i].hitFlash,
+            activeArrow: this.heroAnim[i].activeArrow,
+            shield: hObj.shield,
+            limitAura: isLimit,
+            reflect: true
+          });
+        });
+
+        // Particles
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+          const p = this.particles[i];
+          p.x += p.vx; p.y += p.vy; p.vy += 0.08; p.life--;
+          ctx.fillStyle = p.color;
+          ctx.fillRect(Math.round(p.x), Math.round(p.y), Math.round(p.size), Math.round(p.size));
+          if (p.life <= 0) this.particles.splice(i, 1);
+        }
+
+        // Floating Damage / Heal / MISS Numbers
+        for (let i = this.floatTexts.length - 1; i >= 0; i--) {
+          const ft = this.floatTexts[i];
+          ft.y -= 0.72; ft.life--;
+          ctx.save();
+          ctx.font = ft.big ? "bold 26px Courier New, monospace" : "bold 14px Courier New, monospace";
+          ctx.textAlign = "center";
+          ctx.lineWidth = 4;
+          ctx.strokeStyle = "#000000";
+          ctx.strokeText(ft.text, ft.x, ft.y);
+          ctx.fillStyle = ft.color;
+          ctx.fillText(ft.text, ft.x, ft.y);
+          ctx.restore();
+          if (ft.life <= 0) this.floatTexts.splice(i, 1);
+        }
+      },
+
+      drawVictory() {
+        const c = document.getElementById("canvas-victory");
+        const ctx = c.getContext("2d");
+        const w = c.width, h = c.height;
+        ctx.imageSmoothingEnabled = false;
+
+        Art.drawArenaBG(ctx, w, h, this.tick, true);
+
+        if (this.tick % 24 === 0) {
+          const fx = 45 + Math.random() * (w - 90);
+          const fy = 55 + Math.random() * 190;
+          const cols = ["#ffd43b", "#ff3b4e", "#3ee6ff", "#2ee67a", "#a78bfa"];
+          const col = cols[Math.floor(Math.random() * cols.length)];
+          for (let i = 0; i < 20; i++) {
+            const a = (i / 20) * Math.PI * 2;
+            const s = 1.2 + Math.random() * 2.5;
+            this.fireworks.push({ x: fx, y: fy, vx: Math.cos(a) * s, vy: Math.sin(a) * s, color: col, life: 38 });
+          }
+        }
+        for (let i = this.fireworks.length - 1; i >= 0; i--) {
+          const f = this.fireworks[i];
+          f.x += f.vx; f.y += f.vy; f.vy += 0.04; f.life--;
+          ctx.fillStyle = f.color;
+          ctx.fillRect(Math.round(f.x), Math.round(f.y), 4, 4);
+          if (f.life <= 0) this.fireworks.splice(i, 1);
+        }
+
+        const showPhaseA = !document.getElementById("victory-phase-a").classList.contains("hidden");
+        ["runner", "teacher", "parent", "eco"].forEach((role, i) => {
+          const hx = 56 + i * 82;
+          const hy = showPhaseA ? h * 0.62 : h - 84;
+          const jump = -Math.abs(Math.sin(this.tick * 0.16 + i * 0.8)) * 14;
+          Art.drawHero(ctx, role, hx, hy, this.tick, { scale: 1.38, jumpY: jump });
+          if (showPhaseA) {
+            ctx.font = "bold 10px Courier New, monospace";
+            ctx.textAlign = "center";
+            ctx.fillStyle = "#fff6b8";
+            ctx.strokeStyle = "#000000";
+            ctx.lineWidth = 3;
+            ctx.strokeText("LEVEL UP!", hx, hy - 42 + jump);
+            ctx.fillText("LEVEL UP!", hx, hy - 42 + jump);
+          }
+        });
+      }
+    };
+
+    /* ==========================================================================
+     * 7. SAFE EVENT BINDINGS & IMMEDIATE STARTUP
+     * ========================================================================== */
+    window.onload = function () {
+      try {
+        SpriteBank.init();
+        Game.buildCastModal();
+
+        const optAuto = document.getElementById("title-opt-auto");
+        const optManual = document.getElementById("title-opt-manual");
+        const optCast = document.getElementById("title-opt-cast");
+        const modalCast = document.getElementById("modal-cast");
+
+        const selectTitle = (el) => {
+          [optAuto, optManual, optCast].forEach(o => {
+            o.classList.toggle("selected", o === el);
+            o.querySelector(".glove").classList.toggle("invisible", o !== el);
+          });
+        };
+        [optAuto, optManual, optCast].forEach(o => { o.onmouseenter = () => selectTitle(o); });
+        optAuto.onclick = () => { selectTitle(optAuto); Game.startGame(true); };
+        optManual.onclick = () => { selectTitle(optManual); Game.startGame(false); };
+        optCast.onclick = () => {
+          SFX.init(); SFX.sfxConfirm(); selectTitle(optCast);
+          modalCast.classList.remove("hidden");
+        };
+        document.getElementById("btn-close-cast").onclick = () => {
+          SFX.sfxCursor();
+          modalCast.classList.add("hidden");
+        };
+
+        document.getElementById("btn-mode-toggle").onclick = () => Game.toggleMode();
+        document.getElementById("btn-audio-toggle").onclick = (e) => {
+          SFX.init();
+          SFX.setMuted(!SFX.muted);
+          e.currentTarget.textContent = SFX.muted ? "🔇" : "🔊";
+        };
+        document.getElementById("btn-restart").onclick = () => {
+          SFX.init(); SFX.sfxConfirm(); Game.restartToTitle();
+        };
+
+        // Explore Manual Controls (D-Pad + Tap-to-Walk + Investigate)
+        document.querySelectorAll(".dpad-btn").forEach(btn => {
+          const dir = btn.dataset.dir;
+          const start = (e) => { e.preventDefault(); SFX.init(); Game.walkKeys[dir] = true; Game.tapTarget = null; };
+          const end = (e) => { e.preventDefault(); Game.walkKeys[dir] = false; };
+          btn.addEventListener("pointerdown", start);
+          btn.addEventListener("pointerup", end);
+          btn.addEventListener("pointerleave", end);
+          btn.addEventListener("pointercancel", end);
+        });
+
+        document.getElementById("canvas-explore").addEventListener("pointerdown", (e) => {
+          if (Game.scene !== "explore" || Game.autoMode || Game.exploreBusy) return;
+          SFX.init();
+          const el = e.currentTarget;
+          const rect = el.getBoundingClientRect();
+          const scale = Math.min(rect.width / el.width, rect.height / el.height);
+          const drawW = el.width * scale;
+          const drawH = el.height * scale;
+          const offX = (rect.width - drawW) / 2;
+          const offY = (rect.height - drawH) / 2;
+          const x = Math.max(0, Math.min(el.width, (e.clientX - rect.left - offX) / scale));
+          const y = Math.max(0, Math.min(el.height, (e.clientY - rect.top - offY) / scale)) + Game.camY;
+          Game.tapTarget = { x, y };
+        });
+
+        document.getElementById("btn-explore-act").onclick = () => {
+          if (Game.scene !== "explore" || Game.exploreBusy) return;
+          SFX.init();
+          Game.autoWalkExplore();
+        };
+
+        window.addEventListener("keydown", (e) => {
+          if (Game.scene !== "explore" || Game.autoMode) return;
+          if (e.key === "ArrowUp" || e.key === "w") Game.walkKeys.up = true;
+          if (e.key === "ArrowDown" || e.key === "s") Game.walkKeys.down = true;
+          if (e.key === "ArrowLeft" || e.key === "a") Game.walkKeys.left = true;
+          if (e.key === "ArrowRight" || e.key === "d") Game.walkKeys.right = true;
+        });
+        window.addEventListener("keyup", (e) => {
+          if (Game.scene !== "explore" || Game.autoMode) return;
+          if (e.key === "ArrowUp" || e.key === "w") Game.walkKeys.up = false;
+          if (e.key === "ArrowDown" || e.key === "s") Game.walkKeys.down = false;
+          if (e.key === "ArrowLeft" || e.key === "a") Game.walkKeys.left = false;
+          if (e.key === "ArrowRight" || e.key === "d") Game.walkKeys.right = false;
+        });
+
+        // Battle 4-Option Main Command Menu
+        document.querySelectorAll("#scene-battle [data-cmd]").forEach(el => {
+          el.onclick = () => Game.onMainCommandClick(el.dataset.cmd);
+        });
+
+        // Victory Screen Buttons
+        document.getElementById("btn-vic-replay").onclick = () => Game.startGame(Game.autoMode);
+        document.getElementById("btn-vic-switch").onclick = () => Game.startGame(!Game.autoMode);
+
+        Game.updateModeUI();
+        Game.loop();
+      } catch (err) {
+        console.error("Game Init Error:", err);
+      }
+    };
+  </script>
+</body>
+</html>
